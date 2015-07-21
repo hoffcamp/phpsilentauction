@@ -10,5 +10,15 @@ class SA_BiddersTable extends SA_Table
 			PRIMARY KEY ( `ID` )
 			)" );
 	}
+	
+	// [ ID ]
+	function add( $contactID, $bidderNumber ){}
+	
+	// true
+	function update( $ID, $contactID, $bidderNumber ){}
+	
+	// true
+	function remove( $ID ){}
+
 }
 ?>

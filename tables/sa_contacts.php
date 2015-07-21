@@ -14,6 +14,12 @@ class SA_ContactsTable extends SA_Table
 	// [ ID ]
 	function add( $name, $email ){}
 
+	// true on success
+	function update( $ID, $name, $email ){}
+	
+	// true on success
+	function remove( $ID ){}
+	
 	// [ ID,name,email ]
 	function getByID( $ID ){}
 	
