@@ -34,10 +34,29 @@ load_plugin_textdomain(
 	
 require 'sa_capabilities.php';
 require 'sa_adminlinks.php';
+require 'sa_tables.php';
 
 global $SA_Capabilities;
 global $SA_AdminLinks;
+global $SA_Tables;
 
+// install
+function sa_install(){
+	global $SA_Tables;
+	$SA_Tables = new SA_Tables();
+	$SA_Tables->install();
+}
+register_activation_hook( __FILE__, 'sa_install' );
+
+// uninstall
+function sa_uninstall(){
+	global $SA_Tables;
+	$SA_Tables = new SA_Tables();
+	$SA_Tables->uninstall();
+}
+register_uninstall_hook( __FILE__, 'sa_uninstall' );
+
+// user init
 add_action( 'init', 'sa_userInit' );
 function sa_userInit() {
 	global $SA_Capabilities;
@@ -45,6 +64,7 @@ function sa_userInit() {
 	$SA_Capabilities = new SA_Capabilities();
 }
 
+// admin init
 add_action( 'admin_menu', 'sa_adminMenu' );
 function sa_adminMenu() {
 	global $SA_AdminLinks;
