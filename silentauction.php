@@ -36,6 +36,7 @@ require 'sa_capabilities.php';
 require 'sa_adminlinks.php';
 require 'sa_tables.php';
 require 'sa_options.php';
+require 'sa_crud.php';
 
 global $SA_Capabilities;
 global $SA_AdminLinks;
