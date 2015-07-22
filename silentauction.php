@@ -35,24 +35,36 @@ load_plugin_textdomain(
 require 'sa_capabilities.php';
 require 'sa_adminlinks.php';
 require 'sa_tables.php';
+require 'sa_options.php';
 
 global $SA_Capabilities;
 global $SA_AdminLinks;
 global $SA_Tables;
+global $SA_Options;
 
 // install
 function sa_install(){
 	global $SA_Tables;
+	global $SA_Options;
+	
 	$SA_Tables = new SA_Tables();
 	$SA_Tables->install();
+	
+	$SA_Options = new SA_Options();
+	$SA_Options->install();
 }
 register_activation_hook( __FILE__, 'sa_install' );
 
 // uninstall
 function sa_uninstall(){
 	global $SA_Tables;
+	global $SA_Options;
+	
 	$SA_Tables = new SA_Tables();
 	$SA_Tables->uninstall();
+	
+	$SA_Options = new SA_Options();
+	$SA_Options->uninstall();
 }
 register_uninstall_hook( __FILE__, 'sa_uninstall' );
 
@@ -60,8 +72,12 @@ register_uninstall_hook( __FILE__, 'sa_uninstall' );
 add_action( 'init', 'sa_userInit' );
 function sa_userInit() {
 	global $SA_Capabilities;
+	global $SA_Tables;
+	global $SA_Options;
 	
 	$SA_Capabilities = new SA_Capabilities();
+	$SA_Tables = new SA_Tables();
+	$SA_Options = new SA_Options();
 }
 
 // admin init

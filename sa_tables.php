@@ -8,10 +8,11 @@ install() and uninstall() return no values.
 */
 
 require_once 'tables/sa_table.php';
-require_once 'tables/sa_contacts.php';
-require_once 'tables/sa_bidders.php';
-require_once 'tables/sa_donations.php';
-require_once 'tables/sa_items.php';
+require_once 'tables/sa_table_contacts.php';
+require_once 'tables/sa_table_bidders.php';
+require_once 'tables/sa_table_donations.php';
+require_once 'tables/sa_table_items.php';
+require_once 'tables/sa_table_events.php';
 
 class SA_Tables
 {
@@ -19,12 +20,14 @@ class SA_Tables
 	var $bidders;
 	var $donations;
 	var $items;
+	var $events;
 	
 	function __construct(){
 		$this-> contacts = new SA_ContactsTable( 'contacts' );
 		$this-> bidders = new SA_BiddersTable( 'bidders' );
 		$this-> donations = new SA_DonationsTable( 'donations' );
 		$this-> items = new SA_ItemsTable( 'items' );
+		$this-> events = new SA_EventsTable( 'events' );
 	}
 	
 	function install(){
@@ -32,6 +35,7 @@ class SA_Tables
 		$this-> bidders-> install();
 		$this-> donations-> install();
 		$this-> items-> install();
+		$this-> events-> install();
 	}
 	
 	function uninstall(){
@@ -39,5 +43,6 @@ class SA_Tables
 		$this-> bidders-> uninstall();
 		$this-> donations-> uninstall();
 		$this-> items-> uninstall();
+		$this-> events-> uninstall();
 	}
 }
