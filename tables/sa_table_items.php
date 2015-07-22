@@ -6,7 +6,6 @@ class SA_ItemsTable extends SA_Table
 		$this->_createTable(
 			"CREATE TABLE `".$this->name."` ( 
 			`ID` INT(11) NOT NULL AUTO_INCREMENT,
-			`eventID` INT(11) DEFAULT '0' NOT NULL ,
 			`title` VARCHAR( 255 ) DEFAULT '' NOT NULL ,
 			`description` TEXT DEFAULT '' NOT NULL ,
 			`value` FLOAT DEFAULT '0.0' NOT NULL ,
