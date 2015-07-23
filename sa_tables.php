@@ -51,11 +51,27 @@ class SA_Tables
 	function getBidderList( $eventID ){
 		global $wpdb;
 		$result = $wpdb-> get_results(
-			"SELECT `{$this-> bidders-> name}`.`ID` as `ID`,
-			`{$this-> contacts-> name}`.*
+			$wpdb->prepare( "SELECT `{$this-> bidders-> name}`.`ID` as `ID`,
+			`{$this-> contacts-> name}`.firstName, `{$this-> contacts-> name}`.lastName, `{$this-> contacts-> name}`.email
 			FROM `{$this-> bidders-> name}` LEFT OUTER JOIN `{$this-> contacts-> name}` ON `{$this-> bidders-> name}`.`contactID` = `{$this-> contacts-> name}`.`ID`
-			WHERE `{$this-> bidders-> name}`.`eventID` = '{$eventID}'; "
-		, ARRAY_A );
+			WHERE `{$this-> bidders-> name}`.`eventID` = '%d'; ", $eventID ), ARRAY_A );
 		return $result;
+	}
+	
+	function getBidderInfo( $eventID, $bidderID ){
+		global $wpdb;
+		$result = $wpdb-> get_row(
+			$wpdb-> prepare( "SELECT `{$this-> bidders-> name}`.`ID` as `ID`, `{$this-> bidders-> name}`.`contactID`,
+			`{$this-> contacts-> name}`.firstName, `{$this-> contacts-> name}`.lastName, `{$this-> contacts-> name}`.email
+			FROM `{$this-> bidders-> name}` LEFT OUTER JOIN `{$this-> contacts-> name}` ON `{$this-> bidders-> name}`.`contactID` = `{$this-> contacts-> name}`.`ID`
+			WHERE `{$this-> bidders-> name}`.`eventID` = '%d' AND `{$this-> bidders-> name}`.`ID` = '%d'; ",
+			$eventID, $bidderID ), ARRAY_A );
+		return $result;
+	}
+	
+	function updateBidderInfo( $eventID, $bidderID, $firstName, $lastName, $email ){
+		global $wpdb;
+		$bidderInfo = $this-> getBidderInfo( $eventID, $bidderID );
+		$this-> contacts-> update( $bidderInfo[ 'contactID' ], $firstName, $lastName, $email );
 	}
 }

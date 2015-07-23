@@ -5,33 +5,112 @@ class SA_CRUD_Column
 	var $title;
 	var $id;
 	var $classes;
+	var $_hasInput;
 	
 	function __construct( $id = '', $title = '' ){
 		$this-> id = $id;
 		$this-> title = $title;
+		$this-> classes = array();
+		$this-> _hasInput = true;
 	}
 	
-	function addClass( $className ){ $this-> classes[ $className ] = $className; }	
+	function addClass( $className ){ $this-> classes[ $className ] = $className; return $this; }	
 	function removeClass( $className ){	unset( $this-> classes[ $className ] );	}	
 	function getClassString(){ return implode( ' ', $this-> classes ); }
-	function renderData( $d ){ echo $d[ $this-> id ]; }
-	function getInputID(){ return 'input-' . $this->id; }
-	function renderInput( $d ){
+	function renderData( $rowID, $d ){ echo $d[ $this-> id ]; }
+	function hasInput(){ return $this-> _hasInput; }
+	function disableInput(){ $this-> _hasInput = false; return $this; }
+	function renderInput( $rowID, $d ){
 		$value = isset( $d[ $this->id ] ) ? $d[ $this-> id ] : '';
-		$id = $this->getInputID();
+		$id = 'input-' . $this->id;
 		echo "<input type=\"text\" name=\"{$id}\" id=\"{$id}\" value=\"{$value}\" class=\"regular-text\"/>";
 	}
-	function getInputValue(){
+	// can return an array
+	function getInputValue( $rowID ){
 		return stripslashes( $_POST[ 'input-' . $this->id ] );
+	}
+}
+
+class SA_CRUD_BooleanColumn extends SA_CRUD_Column
+{
+	var $trueValue;
+	var $falseValue;
+	
+	function __construct( $id = '', $title = '', $trueValue = 'yes', $falseValue = 'no' ){
+		parent::__construct( $id, $title );
+		$this-> trueValue = $trueValue;
+		$this-> falseValue = $falseValue;
+	}
+	function renderData( $rowID, $d ){
+		if ( $d[ $this-> id ] == 1 ){ echo $this-> trueValue; }
+		else { echo $this-> falseValue; }
+	}
+}
+
+class SA_CRUD_FloatColumn extends SA_CRUD_Column
+{
+	var $format;
+	function __construct( $id = '', $title = '', $format = '%f' ){
+		parent::__construct( $id, $title );
+		$this-> format = $format;
+	}
+	function renderData( $rowID, $d ){
+		echo sprintf( $this-> format, $d[ $this-> id ] );
 	}
 }
 
 class SA_CRUD_EmptyColumn extends SA_CRUD_Column
 {
-	function getInputID(){ return false; }
-	function getInputValue(){ return false; }
-	function renderInput( $d ){}
-	function renderData( $d ){}
+	function hasInput(){ return false; }
+	function getInputValue( $rowID ){ return false; }
+	function renderInput( $rowID, $d ){}
+	function renderData( $rowID, $d ){}
+}
+
+class SA_CRUD_Action
+{
+	var $hidden;
+	var $id;
+	var $label;
+	
+	function __construct( $id, $label, $hidden = array() ){
+		$this-> id = $id;
+		$this-> label = $label;
+		$this-> hidden = $hidden;
+	}
+}
+
+class SA_CRUD_ActionsColumn extends SA_CRUD_EmptyColumn
+{
+	var $actions;
+	var $hidden;
+	
+	function __construct( $id, $title, $hidden = array() ){
+		parent::__construct( $id, $title );
+		$this-> hidden = $hidden;
+	}
+	
+	function renderData( $rowID, $d ){
+		?>
+<table><tr>
+<?php foreach ( $this-> actions as $a ): ?>
+<td>
+	<form method="get" action="">
+	<input type="submit" name="<?php echo htmlspecialchars( $a-> id ); ?>" id="<?php echo htmlspecialchars( $a-> id ); ?>" value="<?php echo htmlspecialchars( $a-> label ); ?>" class="button" />
+	<?php foreach ( $this->hidden as $name => $value ): ?>
+	<input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>" />
+	<?php endforeach; ?>
+	<?php foreach ( $a->hidden as $name => $value ): ?>
+	<input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>" />
+	<?php endforeach; ?>
+	<input type="hidden" name="crud-row-id" value="<?php echo $rowID; ?>" />
+	</form>
+</td>
+<?php endforeach; ?>
+</tr></table>		<?php
+	}
+	
+	function add( $a ){ $this-> actions[] = $a; return $this; }
 }
 
 class SA_CRUD
@@ -60,8 +139,16 @@ class SA_CRUD
 	function processInputFormPost(){
 		$d = array();
 		foreach ( $this-> cols as $col ){
-			if ( $col-> getInputID() !== false ){
-				$d[ $col-> id ] = $col-> getInputValue();
+			if ( $col-> hasInput() !== false ){
+				$rowID = $_POST[ 'crud-row-id' ];
+				$v = $col-> getInputValue( $rowID );
+				if ( is_array( $v ) ){
+					foreach ( $v as $k => $value ){
+						$d[ $k ] = $value;
+					}
+				} else {
+					$d[ $col-> id ] = $v;
+				}
 			}
 		}
 		return $d;
@@ -71,7 +158,7 @@ class SA_CRUD
 		foreach ( $this-> cols as $col ){
 		$classString = $col->getClassString(); ?>
 		<td class='<?php echo $classString; ?>'>
-			<?php $col->renderData( $d ); ?>
+			<?php $col->renderData( $d[ $this->rowIDFieldName ] , $d ); ?>
 		</td>
 		<?php
 		}
@@ -131,20 +218,22 @@ class SA_CRUD
 	}
 	
 	function renderInputForm( $d = array(), $actionURL = "", $hiddenVars = array() ){
+		$rowID = isset( $d[ $this->rowIDFieldName ] ) ? $d[ $this->rowIDFieldName ] : '';
 ?>
 	<form id="<?php echo $this-> formID; ?>" method="post" action="<?php echo htmlspecialchars($actionURL); ?>" >
 <table class="form-table">
 	<?php foreach ( $this-> cols as $col ): ?>
-	<?php if ( $col->getInputID() !== false ): ?>
+	<?php if ( $col->hasInput() !== false ): ?>
 	<tr>
 	<th scope="row"><label for="<?php echo $col->id; ?>"><?php echo $col->title; ?></label></th>
-	<td><?php $col->renderInput( $d ); ?></td>
+	<td><?php $col->renderInput( $rowID, $d ); ?></td>
 	</tr>
 	<?php endif; ?>
 	<?php endforeach; ?>
 </table>
 	<?php foreach ( $hiddenVars as $name => $value ): ?>
 	<input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>" />
+	<input type="hidden" name="crud-row-id" value="<?php echo $rowID; ?>" />
 	<?php endforeach; ?>
 	<?php $this-> renderSubmitButton( $this-> submitText ); ?>
 

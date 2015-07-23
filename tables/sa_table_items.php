@@ -42,8 +42,15 @@ class SA_ItemsTable extends SA_Table
 	}
 	
 	// [ [*], ... ]
-	function getAll( $ascending ){
-		return $this->_getAll( 'title', $ascending );
+	function getAll( $eventID, $ascending ){
+		global $wpdb;
+		if ( $ascending !== true ){
+			$sort = "DESC";
+		} else {
+			$sort = "";
+		}
+		return $wpdb->get_results(
+				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' ORDER BY `ID` {$sort}", $eventID ), ARRAY_A );
 	}
 	
 	// true; set winning bid information. fail if already marked as won.
@@ -62,7 +69,7 @@ class SA_ItemsTable extends SA_Table
 		global $wpdb;
 		$result = $wpdb-> query(
 		$wpdb-> prepare( 
-			"UPDATE `{$this->name}` SET `winningBidderID` ='0', `winningBid` ='0.0' WHERE `ID` = %d;",
+			"UPDATE `{$this->name}` SET `winningBidderID` ='0', `winningBid` ='0.0', `paid` = '0' WHERE `ID` = %d;",
 			$ID ) );	
 		if ( $result === false ) { return $result; }
 		return true;
