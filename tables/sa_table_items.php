@@ -53,6 +53,13 @@ class SA_ItemsTable extends SA_Table
 				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' ORDER BY `ID` {$sort}", $eventID ), ARRAY_A );
 	}
 	
+	function getCount( $eventID ){
+		global $wpdb;
+		$row = $wpdb->get_row(
+				$wpdb->prepare( "SELECT COUNT(*) as `COUNT` FROM `{$this->name}` WHERE `eventID` = '%d'", $eventID ), ARRAY_A );
+		return $row[ 'COUNT' ];
+	}
+	
 	// true; set winning bid information. fail if already marked as won.
 	function close( $ID, $winningBidderID, $winningBid ){
 		global $wpdb;

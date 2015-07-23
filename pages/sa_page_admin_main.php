@@ -9,11 +9,15 @@ global $SA_AdminLinks;
 <?php
 // no event is currently set
 $currentEventID = get_option( 'sa-current-event', '' );
+$linkClassString = 'page-title-action';
+$eventsPageKey = 'sa-events';
+$biddersPageKey = 'sa-bidders';
+$itemsPageKey = 'sa-items';
+
 if ( $currentEventID == '' ){
 	$eventList = $SA_Tables-> events-> getAll();
-	$eventsPageKey = 'sa-events';
-	$linkClassString = 'page-title-action';
 	
+
 	// ... because there are no events
 	if ( count( $eventList ) == 0 ){
 		echo '<p>' . __("No events yet.", 'silentauction') . '</p>';
@@ -32,6 +36,35 @@ else {
 	$eventInfo = $SA_Tables-> events-> getByID( $currentEventID );
 	if ( $eventInfo !== false ){
 		echo '<p><h3>' . $eventInfo[ 'title' ] . '</h3></p>';
+		
+		$numBidders = $SA_Tables-> bidders-> getCount( $currentEventID );
+		$numItems = $SA_Tables-> bidders-> getCount( $currentEventID );
+		
+		echo '<p>';
+		
+		echo '<a href="' . get_admin_url(null, 'admin.php')."?page={$biddersPageKey}\" class=\"{$linkClassString}\">"
+			. __("Manage Bidders", 'silentauction') . '</a>';
+			
+		echo '<a href="' . get_admin_url(null, 'admin.php')."?page={$itemsPageKey}\" class=\"{$linkClassString}\">"
+			. __("Manage Auction Items", 'silentauction') . '</a>';
+			
+		echo '</p>';
+		
+		?>
+<table class="form-table">
+		
+	<tr>
+	<th scope="row"><label for="numBidders">Number of Bidders</label></th>
+	<td><?php echo $numBidders; ?></td>
+	</tr>
+	
+	<tr>
+	<th scope="row"><label for="numBidders">Number of Items</label></th>
+	<td><?php echo $numItems; ?></td>
+	</tr>
+	
+</table>
+		<?php
 	}
 }
 ?>

@@ -37,5 +37,12 @@ class SA_BiddersTable extends SA_Table
 	function getAll( $ascending = true ){
 		return $this->_getAll( 'contactID', $ascending );
 	}
+	
+	function getCount( $eventID ){
+		global $wpdb;
+		$row = $wpdb->get_row(
+				$wpdb->prepare( "SELECT COUNT(*) as `COUNT` FROM `{$this->name}` WHERE `eventID` = '%d'", $eventID ), ARRAY_A );
+		return $row[ 'COUNT' ];
+	}
 }
 ?>
