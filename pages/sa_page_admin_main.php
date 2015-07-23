@@ -22,8 +22,8 @@ if ( $currentEventID == '' ){
 	}	
 	// otherwise
 	else {
-		echo '<a href="' . get_admin_url(null, 'admin.php')."?page={$eventsPageKey}\" class=\"{$linkClassString}\">"
-			. __("Click here to activate an event.", 'silentauction') . '</a>';
+		echo '<p><a href="' . get_admin_url(null, 'admin.php')."?page={$eventsPageKey}\" class=\"{$linkClassString}\">"
+			. __("Click here to activate an event.", 'silentauction') . '</a></p>';
 	}
 }
 

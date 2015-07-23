@@ -51,7 +51,10 @@ class SA_Tables
 	function getBidderList( $eventID ){
 		global $wpdb;
 		$result = $wpdb-> get_results(
-			"SELECT `{$this-> bidders-> name}`.`ID` as `ID`, `{$this-> contacts-> name}`.`name`, `{$this-> contacts-> name}`.`email` FROM `{$this-> bidders-> name}` WHERE `{$this-> bidders-> name}`.`eventID` = '{$eventID}' `LEFT OUTER JOIN `{$this-> contacts-> name}` ON `{$this-> bidders-> name}`.`contactID` = `{$this-> contacts-> name}`.`ID`; "
+			"SELECT `{$this-> bidders-> name}`.`ID` as `ID`,
+			`{$this-> contacts-> name}`.*
+			FROM `{$this-> bidders-> name}` LEFT OUTER JOIN `{$this-> contacts-> name}` ON `{$this-> bidders-> name}`.`contactID` = `{$this-> contacts-> name}`.`ID`
+			WHERE `{$this-> bidders-> name}`.`eventID` = '{$eventID}'; "
 		, ARRAY_A );
 		return $result;
 	}

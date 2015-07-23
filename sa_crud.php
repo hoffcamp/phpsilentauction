@@ -67,6 +67,16 @@ class SA_CRUD
 		return $d;
 	}
 	
+	function renderRow( $d ){
+		foreach ( $this-> cols as $col ){
+		$classString = $col->getClassString(); ?>
+		<td class='<?php echo $classString; ?>'>
+			<?php $col->renderData( $d ); ?>
+		</td>
+		<?php
+		}
+	}
+	
 	function renderTable( $data ){
 ?>
 <table class="wp-list-table widefat plugins">
@@ -86,7 +96,6 @@ class SA_CRUD
 	</thead>
 
 	<tbody id="the-list">
-	
 		<?php foreach ( $data as $d ): ?>
 		<?php $dataID = $d[ $this->rowIDFieldName ]; ?>
 		<?php $rowID = $this->rowIDPrefix . $dataID; ?>
@@ -97,12 +106,7 @@ class SA_CRUD
 				<input type='checkbox' name='checked[]' value='<?php echo $dataID; ?>' id='checkbox_<?php echo $dataID; ?>' />
 				<?php endif; ?>
 			</th>
-			<?php foreach ( $this-> cols as $col ): ?>
-			<?php $classString = $col->getClassString(); ?>
-			<td class='<?php echo $classString; ?>'>
-				<?php $col->renderData( $d ); ?>
-			</td>
-			<?php endforeach; ?>
+			<?php $this-> renderRow( $d ); ?>
 		</tr>		
 		<?php endforeach; ?>
 	</tbody>
