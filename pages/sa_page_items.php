@@ -7,6 +7,10 @@ $crud-> col( new SA_CRUD_ActionsColumn( '', '', array( 'page' => 'sa-items' ) ) 
 	-> add( new SA_CRUD_Action( 'edit', 'Edit', array( 'view' => 'edit' ) ) )
 	-> addClass( 'column-actions' );
 
+$crud-> col( new SA_CRUD_Column( 'ID', 'Item #' ) )
+	->addClass( 'column-value' )
+	->disableInput();
+	
 $crud-> col( new SA_CRUD_Column( 'title', 'Title' ) )
 	->addClass( 'column-title' )
 	->addClass( 'column-primary' );
