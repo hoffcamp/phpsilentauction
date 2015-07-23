@@ -73,6 +73,11 @@ function sa_uninstall(){
 }
 register_uninstall_hook( __FILE__, 'sa_uninstall' );
 
+function sa_forcelogin_redirect() {
+	return site_url( '/wp-admin/admin.php?page=sa-admin-main' );
+}
+add_filter('v_forcelogin_redirect', 'sa_forcelogin_redirect', 10, 1);
+
 // user init
 add_action( 'init', 'sa_userInit' );
 function sa_userInit() {
@@ -82,7 +87,7 @@ function sa_userInit() {
 	
 	$SA_Capabilities = new SA_Capabilities();
 	$SA_Tables = new SA_Tables();
-	$SA_Options = new SA_Options();
+	$SA_Options = new SA_Options();	
 }
 
 // admin init
