@@ -38,6 +38,7 @@ require 'sa_tables.php';
 require 'sa_options.php';
 require 'sa_crud.php';
 
+require 'pages/sa_tab_nav.php';
 require 'pages/bidders/sa_bidders_form_summary.php';
 require 'pages/items/sa_items_form_close.php';
 require 'pages/items/sa_items_form_reopen.php';
