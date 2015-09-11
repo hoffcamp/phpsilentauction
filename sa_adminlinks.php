@@ -19,8 +19,8 @@ class SA_AdminLinks
 		// Bidder management (CRUD + view statement)
 		$this-> pages[] = add_submenu_page(
 			'sa-admin-main',
-			__("Bidders", 'silentauction'), 
-			__("Bidders", 'silentauction'),
+			__("Bidders_", 'silentauction'), 
+			__("Bidders_", 'silentauction'),
 			'silent_auction_user',
 			'sa-bidders',
 			array($this,'page_bidders')
