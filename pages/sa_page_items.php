@@ -37,7 +37,9 @@ $crud-> col( new SA_CRUD_FloatColumn( 'winningBid', 'Winning Bid', "$%.2f" ) )
 	->disableInput();
 	
 // Name & address
-$crud-> col( new SA_CRUD_Column( 'contactname', 'Contact name' ) )
+$crud-> col( new SA_CRUD_Column( 'name', 'Contact Name' ) )
+	->hideColumn();
+$crud-> col( new SA_CRUD_Column( 'business', 'Business' ) )
 	->hideColumn();
 $crud-> col( new SA_CRUD_Column( 'email', 'E-Mail' ) )
 	->hideColumn();
@@ -87,7 +89,6 @@ function doEditView( $crud ){
 	$entry = $SA_Tables-> items-> getByID( $editID );
 	$contactInfo = $SA_Tables-> contacts-> getByID( $entry[ 'contactID' ] );
 	$entry = array_merge( $entry, $contactInfo );
-	$entry[ 'contactname' ] = $entry[ 'firstName' ];
 	
 	$crud-> renderInputForm( $entry,
 		get_admin_url(null, 'admin.php')."?page=sa-items",
@@ -128,7 +129,7 @@ function processPost( $crud ){
 		if ( $viewMode == 'add' ){
 			$entry = $crud-> processInputFormPost();
 			// add a contact
-			$contactID = $SA_Tables-> contacts-> add( $entry[ 'contactname' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
+			$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 			// add an item			
 			$SA_Tables-> items-> add( $currentEventID,
 				$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ], $contactID );
@@ -137,7 +138,7 @@ function processPost( $crud ){
 			$editID = $_POST[ 'edit-id' ];			
 			// update contact
 			$contactID = $SA_Tables-> items-> getContactID( $editID );
-			$SA_Tables-> contacts-> update( $contactID, $entry[ 'contactname' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
+			$SA_Tables-> contacts-> update( $contactID, $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 			// update item			
 			$SA_Tables-> items-> update( $editID,
 				$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ] );

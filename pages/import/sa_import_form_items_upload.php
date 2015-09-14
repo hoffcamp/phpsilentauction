@@ -24,6 +24,7 @@ class SA_Form_ItemsUpload
 		<?php
 	}
 	
+	// return the data scraped from the document
 	function processPost(){
 		$filename = $_FILES[ 'file-upload' ][ "tmp_name" ];
 		
@@ -37,8 +38,16 @@ class SA_Form_ItemsUpload
 		$highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
 
 		// decode column names
-		$columnNamesToKeys = array();
-		
+		$columnNamesToKeys = array(	
+			"Contact Name" => 'name',
+			"Business" => 'business',
+			"Address" => 'addr',
+			"City" => 'city',
+			"State" => 'state',
+			"Zip" => 'zip',
+			"Description" => 'description',
+			"Value" => 'value'
+		);		
 		
 		/*
 		Bidders - 
@@ -70,17 +79,43 @@ class SA_Form_ItemsUpload
 
 		*/
 		
-		echo '<table>' . "\n";
-		for ($row = 1; $row <= $highestRow; ++$row) {
-			echo '<tr>' . PHP_EOL;
-			for ($col = 0; $col <= $highestColumnIndex; ++$col) {
-				echo '<td>' . 
-					 $objWorksheet->getCellByColumnAndRow($col, $row)
-						 ->getValue() . 
-					 '</td>' . PHP_EOL;
+		$columnIndices = array();
+		
+		for ( $col = 0; $col <= $highestColumnIndex; $col++ ){
+			$colValue = $objWorksheet->getCellByColumnAndRow($col, 1)->getValue();			
+			if ( isset( $columnNamesToKeys[ $colValue ] ) ){
+				$colKey = $columnNamesToKeys[ $colValue ];
+				$columnIndices[ $col ] = $colKey;
+				echo "Mapping '" . $colValue . "' to `" . $colKey . "`<br/>";
 			}
-			echo '</tr>' . PHP_EOL;
 		}
-		echo '</table>' . PHP_EOL;
+		
+		$data = array();
+		
+		for ($row = 2; $row <= $highestRow; ++$row) {
+			$d = array(
+				'title' => '',
+				'description' => '',
+				'value' => '',
+				'startBid' => '',
+				'minIncrease' => '',
+				'name' => '',
+				'business' => '',
+				'addr' => '',
+				'city' => '',
+				'state' => '',
+				'zip' => '',
+				'email' => '',
+			);
+			for ( $col = 0; $col <= $highestColumnIndex; $col++ ){
+				$cellValue = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+				if ( isset( $columnIndices[ $col ] ) ){
+					$d[ $columnIndices[ $col ] ] = $cellValue;
+				}
+			}
+			$data[] = $d;
+		}		
+
+		return $data;
 	}
 }

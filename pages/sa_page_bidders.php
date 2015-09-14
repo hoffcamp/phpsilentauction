@@ -13,27 +13,7 @@ class SA_BidderNumberColumn extends SA_CRUD_EmptyColumn
 $bidderNumberCol = $crud-> col( new SA_BidderNumberColumn( 'ID', 'Bidder #' ) );
 $bidderNumberCol->addClass( 'column-bidder-number' );
 
-class SA_NameColumn extends SA_CRUD_Column
-{
-	function renderData( $rowID, $d ){
-		$firstName = stripSlashes( $d[ 'firstName' ] );
-		$lastName = stripSlashes( $d[ 'lastName' ] );
-		echo $lastName . ', ' . $firstName;
-	}
-	function renderInput( $rowID, $d ){
-		$firstName = isset( $d[ 'firstName' ] ) ? $d[ 'firstName' ] : '';
-		$lastName = isset( $d[ 'lastName' ] ) ? $d[ 'lastName' ] : '';
-		echo 'First: <input type="text" name="input-firstName" value="'.$firstName.'" class="regular-text" style="width:130px;"/>';
-		echo 'Last: <input type="text" name="input-lastName" value="'.$lastName.'" class="regular-text" style="width:180px;"/>';
-	}
-	function getInputValue( $rowID ){
-		$result = array();
-		$result[ 'firstName' ] = stripslashes( $_POST[ 'input-firstName' ] );
-		$result[ 'lastName' ] = stripslashes( $_POST[ 'input-lastName' ] );
-		return $result;
-	}
-}
-$nameCol = $crud-> col( new SA_NameColumn( 'name', 'Name' ) );
+$nameCol = $crud-> col( new SA_CRUD_Column( 'name', 'Name' ) );
 $nameCol->addClass( 'column-name' );
 
 $emailCol = $crud-> col( new SA_CRUD_Column( 'email', 'E-Mail' ) );
@@ -106,12 +86,12 @@ function processPost( $crud ){
 		$viewMode = $_POST[ 'view-mode' ];
 		if ( $viewMode == 'add' ){
 			$entry = $crud-> processInputFormPost();
-			$contactID = $SA_Tables-> contacts-> add( $entry[ 'firstName' ], $entry[ 'lastName' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
+			$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 			$SA_Tables-> bidders-> add( $currentEventID, $contactID );
 		} elseif ( $viewMode == 'edit' ){
 			$entry = $crud-> processInputFormPost();
 			$editID = $_POST[ 'edit-id' ]; // bidder ID
-			$SA_Tables-> updateBidderInfo( $currentEventID, $editID, $entry[ 'firstName' ], $entry[ 'lastName' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );			
+			$SA_Tables-> updateBidderInfo( $currentEventID, $editID, $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );			
 		}
 	}
 }
