@@ -15,17 +15,18 @@ class SA_ItemsTable extends SA_Table
 			`paid` TINYINT(1) DEFAULT '0' NOT NULL ,
 			`winningBidderID` INT(11) DEFAULT '0' NOT NULL ,
 			`winningBid` FLOAT DEFAULT '0.0' NOT NULL ,
+			`contactID` INT DEFAULT '0' NOT NULL ,			
 			PRIMARY KEY ( `ID` )
 			)" );
 	}
 	
 	// [ ID ]
-	function add( $eventID, $title, $description, $value, $startBid, $minIncrease ){
+	function add( $eventID, $title, $description, $value, $startBid, $minIncrease, $contactID ){
 		global $wpdb; 
 		$wpdb-> query(
 		$wpdb-> prepare(
-			"INSERT INTO `{$this->name}` (`eventID`, `title`, `description`, `value`, `startBid`, `minIncrease` ) VALUES ('%d', '%s', '%s', '%f', '%f', '%f' )",
-			$eventID, $title, $description, $value, $startBid, $minIncrease ) );
+			"INSERT INTO `{$this->name}` (`eventID`, `title`, `description`, `value`, `startBid`, `minIncrease`, `contactID` ) VALUES ('%d', '%s', '%s', '%f', '%f', '%f', '%d' )",
+			$eventID, $title, $description, $value, $startBid, $minIncrease, $contactID ) );
 		$results = $wpdb->get_row( 'SELECT LAST_INSERT_ID() as `ID`;', ARRAY_A );
 		return $results[ 'ID' ];
 	}
@@ -39,6 +40,13 @@ class SA_ItemsTable extends SA_Table
 			$title, $description, $value, $startBid, $minIncrease, $ID ) );	
 		if ( $result === false ) { return $result; }
 		return true;
+	}
+	
+	function getContactID( $ID ){
+		global $wpdb;
+		$row = $wpdb->get_row(
+				$wpdb->prepare( "SELECT `contactID` FROM `{$this->name}` WHERE `ID` = '%d'", $ID ), ARRAY_A );
+		return $row[ 'contactID' ];
 	}
 	
 	// [ [*], ... ]

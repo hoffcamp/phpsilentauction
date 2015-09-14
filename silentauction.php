@@ -38,10 +38,15 @@ require 'sa_tables.php';
 require 'sa_options.php';
 require 'sa_crud.php';
 
-require 'pages/sa_tab_nav.php';
+require 'pages/sa_nav.php';
+require 'pages/includes/sa_page.php';
 require 'pages/bidders/sa_bidders_form_summary.php';
 require 'pages/items/sa_items_form_close.php';
 require 'pages/items/sa_items_form_reopen.php';
+require 'pages/import/sa_import_form_items_upload.php';
+require 'pages/import/sa_import_form_items_verify.php';
+require 'pages/import/sa_import_form_items_select_columns.php';
+require 'PHPExcel-1.8/Classes/PHPExcel.php';
 
 global $SA_Capabilities;
 global $SA_AdminLinks;

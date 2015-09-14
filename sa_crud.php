@@ -6,12 +6,14 @@ class SA_CRUD_Column
 	var $id;
 	var $classes;
 	var $_hasInput;
+	var $_hideColumn;
 	
 	function __construct( $id = '', $title = '' ){
 		$this-> id = $id;
 		$this-> title = $title;
 		$this-> classes = array();
 		$this-> _hasInput = true;
+		$this-> _hideColumn = false;
 	}
 	
 	function addClass( $className ){ $this-> classes[ $className ] = $className; return $this; }	
@@ -20,6 +22,7 @@ class SA_CRUD_Column
 	function renderData( $rowID, $d ){ echo $d[ $this-> id ]; }
 	function hasInput(){ return $this-> _hasInput; }
 	function disableInput(){ $this-> _hasInput = false; return $this; }
+	function hideColumn(){ $this-> _hideColumn = true; return $this; }
 	function renderInput( $rowID, $d ){
 		$value = isset( $d[ $this->id ] ) ? $d[ $this-> id ] : '';
 		$id = 'input-' . $this->id;
@@ -156,11 +159,13 @@ class SA_CRUD
 	
 	function renderRow( $d ){
 		foreach ( $this-> cols as $col ){
-		$classString = $col->getClassString(); ?>
-		<td class='<?php echo $classString; ?>'>
-			<?php $col->renderData( $d[ $this->rowIDFieldName ] , $d ); ?>
-		</td>
-		<?php
+			if ( !$col->_hideColumn ){
+				$classString = $col->getClassString(); ?>
+				<td class='<?php echo $classString; ?>'>
+					<?php $col->renderData( $d[ $this->rowIDFieldName ] , $d ); ?>
+				</td>
+				<?php
+			}
 		}
 	}
 	
@@ -176,8 +181,10 @@ class SA_CRUD
 			<?php endif; ?>
 		</td>
 		<?php foreach ( $this-> cols as $col ): ?>
-		<?php $classString = 'manage-column ' . $col->getClassString(); ?>
-		<th scope="col" id='<?php echo htmlspecialchars($col->id); ?>' class='<?php echo $classString; ?>'><?php echo htmlspecialchars($col->title); ?></th>
+			<?php if ( !$col->_hideColumn ): ?>
+				<?php $classString = 'manage-column ' . $col->getClassString(); ?>
+				<th scope="col" id='<?php echo htmlspecialchars($col->id); ?>' class='<?php echo $classString; ?>'><?php echo htmlspecialchars($col->title); ?></th>
+			<?php endif; ?>
 		<?php endforeach; ?>
 	</tr>
 	</thead>
@@ -207,8 +214,10 @@ class SA_CRUD
 			<?php endif; ?>
 		</td>
 		<?php foreach ( $this-> cols as $col ): ?>
-		<?php $classString = 'manage-column ' . $col->getClassString(); ?>
-		<th scope="col" id='<?php echo htmlspecialchars($col->id); ?>' class='<?php echo $classString; ?>'><?php echo htmlspecialchars($col->title); ?></th>
+			<?php if ( !$col->_hideColumn ): ?>
+				<?php $classString = 'manage-column ' . $col->getClassString(); ?>			
+				<th scope="col" id='<?php echo htmlspecialchars($col->id); ?>' class='<?php echo $classString; ?>'><?php echo htmlspecialchars($col->title); ?></th>
+			<?php endif; ?>
 		<?php endforeach; ?>
 	</tr>
 	</tfoot>

@@ -4,9 +4,10 @@ global $SA_AdminLinks;
 
 ?>
 <div class="wrap">
-<h1><?php _e( "Silent Auction", 'silentauction' ); ?></h1>
-	
 <?php
+
+sa_heading( __( "Summary", 'silentauction' ) ); 
+
 // no event is currently set
 $currentEventID = get_option( 'sa-current-event', '' );
 $linkClassString = 'page-title-action';
@@ -16,7 +17,6 @@ $itemsPageKey = 'sa-items';
 
 if ( $currentEventID == '' ){
 	$eventList = $SA_Tables-> events-> getAll();
-	
 
 	// ... because there are no events
 	if ( count( $eventList ) == 0 ){
@@ -38,17 +38,7 @@ else {
 		echo '<p><h3>' . $eventInfo[ 'title' ] . '</h3></p>';
 		
 		$numBidders = $SA_Tables-> bidders-> getCount( $currentEventID );
-		$numItems = $SA_Tables-> bidders-> getCount( $currentEventID );
-		
-		echo '<p>';
-		
-		echo '<a href="' . get_admin_url(null, 'admin.php')."?page={$biddersPageKey}\" class=\"{$linkClassString}\">"
-			. __("Manage Bidders", 'silentauction') . '</a>';
-			
-		echo '<a href="' . get_admin_url(null, 'admin.php')."?page={$itemsPageKey}\" class=\"{$linkClassString}\">"
-			. __("Manage Auction Items", 'silentauction') . '</a>';
-			
-		echo '</p>';
+		$numItems = $SA_Tables-> bidders-> getCount( $currentEventID );		
 		
 		?>
 <table class="form-table">

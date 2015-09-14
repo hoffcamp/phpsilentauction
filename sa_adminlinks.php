@@ -35,6 +35,18 @@ class SA_AdminLinks
 			'sa-items',
 			array($this,'page_items')
 			);
+			
+		// Import
+		$this-> pages[] = add_submenu_page(
+			'sa-admin-main',
+			__("Import", 'silentauction'), 
+			__("Import", 'silentauction'),
+			'silent_auction_user',
+			'sa-import',
+			array($this,'page_import')
+			);
+			
+		// Export
 		
 		// Event management 
 		$this-> pages[] = add_submenu_page(
@@ -69,6 +81,10 @@ class SA_AdminLinks
 	
 	function page_events(){
 		include 'pages/sa_page_events.php';
+	}
+	
+	function page_import(){
+		include 'pages/sa_page_import.php';
 	}
 	
 	function admin_scripts(){

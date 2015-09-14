@@ -39,6 +39,15 @@ $nameCol->addClass( 'column-name' );
 $emailCol = $crud-> col( new SA_CRUD_Column( 'email', 'E-Mail' ) );
 $emailCol->addClass( 'column-name' );
 
+$crud-> col( new SA_CRUD_Column( 'addr', 'Address' ) )
+	->hideColumn();
+$crud-> col( new SA_CRUD_Column( 'city', 'City' ) )
+	->hideColumn();
+$crud-> col( new SA_CRUD_Column( 'state', 'State' ) )
+	->hideColumn();
+$crud-> col( new SA_CRUD_Column( 'zip', 'Zip' ) )
+	->hideColumn();	
+
 class SA_BidderActions extends SA_CRUD_EmptyColumn
 {
 	function renderData( $rowID, $d ){
@@ -97,12 +106,12 @@ function processPost( $crud ){
 		$viewMode = $_POST[ 'view-mode' ];
 		if ( $viewMode == 'add' ){
 			$entry = $crud-> processInputFormPost();
-			$contactID = $SA_Tables-> contacts-> add( $entry[ 'firstName' ], $entry[ 'lastName' ], $entry[ 'email' ] );
+			$contactID = $SA_Tables-> contacts-> add( $entry[ 'firstName' ], $entry[ 'lastName' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 			$SA_Tables-> bidders-> add( $currentEventID, $contactID );
 		} elseif ( $viewMode == 'edit' ){
 			$entry = $crud-> processInputFormPost();
 			$editID = $_POST[ 'edit-id' ]; // bidder ID
-			$SA_Tables-> updateBidderInfo( $currentEventID, $editID, $entry[ 'firstName' ], $entry[ 'lastName' ], $entry[ 'email' ] );			
+			$SA_Tables-> updateBidderInfo( $currentEventID, $editID, $entry[ 'firstName' ], $entry[ 'lastName' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );			
 		}
 	}
 }
@@ -123,12 +132,15 @@ $showPage = ( $currentEventID != '' );
 }
 </style>
 <div class="wrap">
-<h1><?php _e( "Bidders", 'silentauction' ); ?>&nbsp;
-<?php if ( $showPage ): ?>
-<?php echo '<a href="' . get_admin_url(null, 'admin.php')."?page=sa-bidders&view=add\" class=\"page-title-action\">"
-	. __("Add Bidder", 'silentauction') . '</a>' ?>
-<?php endif; ?>
-</h1>
+
+<?php
+
+$subtitle = __( "Bidders", 'silentauction' );
+
+if ( $showPage ){ $subtitle .= ' <a href="' . get_admin_url(null, 'admin.php')."?page=sa-bidders&view=add\" class=\"page-title-action\">"
+	. __("Add Bidder", 'silentauction') . '</a>'; }
+
+sa_heading( $subtitle ); ?>
 	
 <?php
 	if ( $showPage ){

@@ -36,6 +36,20 @@ $crud-> col( new SA_CRUD_FloatColumn( 'winningBid', 'Winning Bid', "$%.2f" ) )
 	->addClass( 'column-winningBid' )
 	->disableInput();
 	
+// Name & address
+$crud-> col( new SA_CRUD_Column( 'contactname', 'Contact name' ) )
+	->hideColumn();
+$crud-> col( new SA_CRUD_Column( 'email', 'E-Mail' ) )
+	->hideColumn();
+$crud-> col( new SA_CRUD_Column( 'addr', 'Address' ) )
+	->hideColumn();
+$crud-> col( new SA_CRUD_Column( 'city', 'City' ) )
+	->hideColumn();
+$crud-> col( new SA_CRUD_Column( 'state', 'State' ) )
+	->hideColumn();
+$crud-> col( new SA_CRUD_Column( 'zip', 'Zip' ) )
+	->hideColumn();	
+	
 class SA_ItemActions extends SA_CRUD_EmptyColumn
 {
 	function renderData( $rowID, $d ){
@@ -71,6 +85,10 @@ function doEditView( $crud ){
 	global $SA_Tables;
 	$editID = isset( $_GET[ 'crud-row-id' ] ) ? $_GET[ 'crud-row-id' ] : '';
 	$entry = $SA_Tables-> items-> getByID( $editID );
+	$contactInfo = $SA_Tables-> contacts-> getByID( $entry[ 'contactID' ] );
+	$entry = array_merge( $entry, $contactInfo );
+	$entry[ 'contactname' ] = $entry[ 'firstName' ];
+	
 	$crud-> renderInputForm( $entry,
 		get_admin_url(null, 'admin.php')."?page=sa-items",
 		array( 'view-mode' => 'edit', 'edit-id' => $editID ) );
@@ -109,11 +127,18 @@ function processPost( $crud ){
 		$viewMode = $_POST[ 'view-mode' ];
 		if ( $viewMode == 'add' ){
 			$entry = $crud-> processInputFormPost();
+			// add a contact
+			$contactID = $SA_Tables-> contacts-> add( $entry[ 'contactname' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
+			// add an item			
 			$SA_Tables-> items-> add( $currentEventID,
-				$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ] );
+				$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ], $contactID );
 		} elseif ( $viewMode == 'edit' ){
 			$entry = $crud-> processInputFormPost();
-			$editID = $_POST[ 'edit-id' ];
+			$editID = $_POST[ 'edit-id' ];			
+			// update contact
+			$contactID = $SA_Tables-> items-> getContactID( $editID );
+			$SA_Tables-> contacts-> update( $contactID, $entry[ 'contactname' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
+			// update item			
 			$SA_Tables-> items-> update( $editID,
 				$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ] );
 		}
@@ -147,13 +172,13 @@ $showPage = ( $currentEventID != '' );
 }
 </style>
 <div class="wrap">
-<h1><?php _e( "Items", 'silentauction' ); ?>&nbsp;
-<?php if ( $showPage ): ?>
-<?php echo '<a href="' . get_admin_url(null, 'admin.php')."?page=sa-items&view=add\" class=\"page-title-action\">"
-	. __("Add Item", 'silentauction') . '</a>' ?>
-<?php endif; ?>
-</h1>
-	
+<?php
+$subtitle = __( "Items", 'silentauction' );
+
+if ( $showPage ){ $subtitle .= ' <a href="' . get_admin_url(null, 'admin.php')."?page=sa-items&view=add\" class=\"page-title-action\">" . __("Add Item", 'silentauction') . '</a>'; }
+
+sa_heading( $subtitle ); ?>
+
 <?php
 	if ( $showPage ){
 		processPost( $crud );
