@@ -7,28 +7,29 @@ class SA_BiddersTable extends SA_Table
 			`ID` INT(11) NOT NULL AUTO_INCREMENT,
 			`eventID` INT DEFAULT '0' NOT NULL ,
 			`contactID` INT DEFAULT '0' NOT NULL ,
+			`bidderNumber` INT DEFAULT '0' NOT NULL ,
 			PRIMARY KEY ( `ID` )
 			)" );
 	}
 	
 	// [ ID ]
-	function add( $eventID, $contactID ){
+	function add( $eventID, $contactID, $bidderNumber ){
 		global $wpdb; 
 		$wpdb-> query(
 		$wpdb-> prepare(
-			"INSERT INTO `{$this->name}` (`eventID`, `contactID`) VALUES ('%d', '%d')",
-			$eventID, $contactID ) );
+			"INSERT INTO `{$this->name}` (`eventID`, `contactID`, `bidderNumber`) VALUES ('%d', '%d', '%d')",
+			$eventID, $contactID, $bidderNumber ) );
 		$results = $wpdb->get_row( 'SELECT LAST_INSERT_ID() as `ID`;', ARRAY_A );
 		return $results[ 'ID' ];
 	}
 	
 	// true on success
-	function update( $ID, $contactID ){
+	function update( $ID, $bidderNumber ){
 		global $wpdb;
 		$result = $wpdb-> query(
 		$wpdb-> prepare( 
-			"UPDATE `{$this->name}` SET `contactID` = '%d' WHERE `ID` = %d;",
-			$contactID, $ID ) );	
+			"UPDATE `{$this->name}` SET `bidderNumber` = '%d' WHERE `ID` = %d;",
+			$bidderNumber, $ID ) );	
 		if ( $result === false ) { return $result; }
 		return true;
 	}

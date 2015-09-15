@@ -1,5 +1,4 @@
 <?php
-// kr8EYU!n2sd#b^7Ja7)qlXuw
 
 class SA_Options
 {

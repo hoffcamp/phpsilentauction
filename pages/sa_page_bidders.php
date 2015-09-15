@@ -6,12 +6,7 @@ $actionsCol = $crud-> col( new SA_CRUD_ActionsColumn( '', '', array( 'page' => '
 $actionsCol-> add( new SA_CRUD_Action( 'edit', 'Edit', array( 'view' => 'edit' ) ) );
 $actionsCol-> addClass( 'column-actions' );
 
-class SA_BidderNumberColumn extends SA_CRUD_EmptyColumn
-{
-	function renderData( $rowID, $d ){ echo $d[ $this-> id ]; }
-}
-$bidderNumberCol = $crud-> col( new SA_BidderNumberColumn( 'ID', 'Bidder #' ) );
-$bidderNumberCol->addClass( 'column-bidder-number' );
+$crud-> col( new SA_CRUD_Column( 'bidderNumber', "Bid No." ) );
 
 $nameCol = $crud-> col( new SA_CRUD_Column( 'name', 'Name' ) );
 $nameCol->addClass( 'column-name' );
@@ -86,12 +81,12 @@ function processPost( $crud ){
 		$viewMode = $_POST[ 'view-mode' ];
 		if ( $viewMode == 'add' ){
 			$entry = $crud-> processInputFormPost();
-			$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
-			$SA_Tables-> bidders-> add( $currentEventID, $contactID );
+			$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
+			$SA_Tables-> bidders-> add( $currentEventID, $contactID, $entry[ 'bidderNumber' ] );
 		} elseif ( $viewMode == 'edit' ){
 			$entry = $crud-> processInputFormPost();
 			$editID = $_POST[ 'edit-id' ]; // bidder ID
-			$SA_Tables-> updateBidderInfo( $currentEventID, $editID, $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );			
+			$SA_Tables-> updateBidderInfo( $currentEventID, $editID, $entry[ 'bidderNumber' ], $entry[ 'name' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );			
 		}
 	}
 }

@@ -29,8 +29,8 @@ class SA_AdminLinks
 		// Items management (CRUD + closeout + mark as paid)
 		$this-> pages[] = add_submenu_page(
 			'sa-admin-main',
-			__("Items", 'silentauction'), 
-			__("Items", 'silentauction'),
+			__("Auction Items", 'silentauction'), 
+			__("Auction Items", 'silentauction'),
 			'silent_auction_user',
 			'sa-items',
 			array($this,'page_items')
@@ -41,13 +41,21 @@ class SA_AdminLinks
 			'sa-admin-main',
 			__("Import", 'silentauction'), 
 			__("Import", 'silentauction'),
-			'silent_auction_user',
+			'silent_auction_admin',
 			'sa-import',
 			array($this,'page_import')
 			);
 			
 		// Export
-		
+		$this-> pages[] = add_submenu_page(
+			'sa-admin-main',
+			__("Export", 'silentauction'), 
+			__("Export", 'silentauction'),
+			'silent_auction_admin',
+			'sa-export',
+			array($this,'page_export')
+			);
+			
 		// Event management 
 		$this-> pages[] = add_submenu_page(
 			'sa-admin-main',
@@ -85,6 +93,10 @@ class SA_AdminLinks
 	
 	function page_import(){
 		include 'pages/sa_page_import.php';
+	}
+	
+	function page_export(){
+		include 'pages/sa_page_export.php';
 	}
 	
 	function admin_scripts(){

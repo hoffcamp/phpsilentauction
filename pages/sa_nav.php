@@ -2,9 +2,10 @@
 function sa_tab_nav(){
 	$pages = array(
 		'sa-admin-main' => "Home",
-		'sa-items' => "Items",
+		'sa-items' => "Auction Items",
 		'sa-bidders' => "Bidders",
-		'sa-import' => "Import"
+		'sa-import' => "Import",
+		'sa-export' => "Export"
 	);
 ?>
 <div id="sa-tabs-wrap">

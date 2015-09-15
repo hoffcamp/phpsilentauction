@@ -1,5 +1,5 @@
 <?php
-class SA_Form_ItemsUpload
+class SA_Form_BiddersUpload
 {
 	function __construct( $action ){
 		$this->action = $action;		
@@ -10,7 +10,7 @@ class SA_Form_ItemsUpload
 <form method="post" enctype="multipart/form-data" action="<?php echo $this-> action; ?>" >
 	<table class="form-table">
 		<tr>
-		<th scope="row"><label for="file-upload">Import Items</label></th>
+		<th scope="row"><label for="file-upload">Import Bidders</label></th>
 		<td><input type="file" name="file-upload" id="file-upload"></td>
 		</tr>
 	</table>
@@ -38,16 +38,14 @@ class SA_Form_ItemsUpload
 
 		// decode column names
 		$columnNamesToKeys = array(	
-			"Contact Name" => 'name',
-			"Business" => 'business',
+			"Full Name" => 'name',		
 			"Address" => 'addr',
 			"City" => 'city',
 			"State" => 'state',
-			"Zip" => 'zip',
-			"Description" => 'title',
-			"Value" => 'value',
-			"Email" => 'email'
-		);		
+			"Zip" => 'zip',			
+			"Email" => 'email',
+			"Bid No." => 'bidderNumber'
+		);
 		
 		$columnIndices = array();
 		
@@ -59,15 +57,10 @@ class SA_Form_ItemsUpload
 			}
 		}
 		
-		$data = array();
+		$data = array();		
 		
 		for ($row = 2; $row <= $highestRow; ++$row) {
-			$d = array(
-				'title' => '',
-				'description' => '',
-				'value' => '',
-				'startBid' => '',
-				'minIncrease' => '',
+			$d = array(				
 				'name' => '',
 				'business' => '',
 				'addr' => '',
@@ -75,6 +68,7 @@ class SA_Form_ItemsUpload
 				'state' => '',
 				'zip' => '',
 				'email' => '',
+				'bidderNumber' => ''
 			);
 			for ( $col = 0; $col <= $highestColumnIndex; $col++ ){
 				$cellValue = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
@@ -93,48 +87,35 @@ class SA_Form_ItemsUpload
 		<table>
 			<thead>
 				<tr>
-					<th><?php _e( "Contact Name", 'silentauction' ); ?></th>
-					<th><?php _e( "Email", 'silentauction' ); ?></th>
-					<th><?php _e( "Business", 'silentauction' ); ?></th>
+					<th><?php _e( "Full Name", 'silentauction' ); ?></th>
+					<th><?php _e( "Bid No.", 'silentauction' ); ?></th>
+					<th><?php _e( "Email", 'silentauction' ); ?></th>					
 					<th><?php _e( "Address", 'silentauction' ); ?></th>
 					<th><?php _e( "City", 'silentauction' ); ?></th>
 					<th><?php _e( "State", 'silentauction' ); ?></th>
-					<th><?php _e( "ZIP", 'silentauction' ); ?></th>
-					<th><?php _e( "Value", 'silentauction' ); ?></th>					
-					<th><?php _e( "Description", 'silentauction' ); ?></th>		
+					<th><?php _e( "ZIP", 'silentauction' ); ?></th>					
 				</tr>
 			</thead>
 			<?php foreach( $data as $d ): ?>
 				<tr>
 					<td><?php echo $d[ 'name' ]; ?></td>
-					<td><?php echo $d[ 'email' ]; ?></td>
-					<td><?php echo $d[ 'business' ]; ?></td>
+					<td><?php echo $d[ 'bidderNumber' ]; ?></td>
+					<td><?php echo $d[ 'email' ]; ?></td>					
 					<td><?php echo $d[ 'addr' ]; ?></td>
 					<td><?php echo $d[ 'city' ]; ?></td>
 					<td><?php echo $d[ 'state' ]; ?></td>
-					<td><?php echo $d[ 'zip' ]; ?></td>
-					<td><?php echo $d[ 'value' ]; ?></td>
-					<td><?php
-						if ( strlen( $d[ 'title' ] ) > 30 ){
-							echo substr( $d[ 'title' ], 0, 27 ) . "...";
-						} else {
-							echo $d[ 'title' ];
-						}
-						?>
-					</td>
+					<td><?php echo $d[ 'zip' ]; ?></td>					
 				</tr>
 			<?php endforeach; ?>
 			<tfoot>
 				<tr>
-					<th><?php _e( "Contact Name", 'silentauction' ); ?></th>
-					<th><?php _e( "Email", 'silentauction' ); ?></th>
-					<th><?php _e( "Business", 'silentauction' ); ?></th>
+					<th><?php _e( "Full Name", 'silentauction' ); ?></th>
+					<th><?php _e( "Bid No.", 'silentauction' ); ?></th>
+					<th><?php _e( "Email", 'silentauction' ); ?></th>					
 					<th><?php _e( "Address", 'silentauction' ); ?></th>
 					<th><?php _e( "City", 'silentauction' ); ?></th>
 					<th><?php _e( "State", 'silentauction' ); ?></th>
-					<th><?php _e( "ZIP", 'silentauction' ); ?></th>
-					<th><?php _e( "Value", 'silentauction' ); ?></th>
-					<th><?php _e( "Description", 'silentauction' ); ?></th>					
+					<th><?php _e( "ZIP", 'silentauction' ); ?></th>					
 				</tr>
 			</tfoot>
 		</table>
