@@ -70,13 +70,17 @@ class SA_Form_BiddersUpload
 				'email' => '',
 				'bidderNumber' => ''
 			);
+			$hasValue = false;
 			for ( $col = 0; $col <= $highestColumnIndex; $col++ ){
-				$cellValue = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+				$cellValue = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();				
 				if ( isset( $columnIndices[ $col ] ) ){
+					if ( trim($cellValue) != "" ){ $hasValue = true; }
 					$d[ $columnIndices[ $col ] ] = $cellValue;
 				}
 			}
-			$data[] = $d;
+			if ( $hasValue ){
+				$data[] = $d;
+			}
 		}		
 
 		return $data;

@@ -25,6 +25,9 @@ License: GPL2
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+global $SA_DIR;
+$SA_DIR = plugin_dir_path( __FILE__ );
+
 // Internationalization
 load_plugin_textdomain(
 	'silentauction', 
@@ -47,7 +50,8 @@ require 'pages/items/sa_items_form_close.php';
 require 'pages/items/sa_items_form_reopen.php';
 require 'pages/import/sa_import_form_items_upload.php';
 require 'pages/import/sa_import_form_bidders_upload.php';
-require 'PHPExcel-1.8/Classes/PHPExcel.php';
+//require 'PHPExcel-1.8/Classes/PHPExcel.php';
+//require 'fpdf/fpdf.php';
 
 global $SA_Capabilities;
 global $SA_AdminLinks;

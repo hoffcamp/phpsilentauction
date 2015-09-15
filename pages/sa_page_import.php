@@ -1,5 +1,9 @@
 <div class="wrap">
 <?php
+
+global $SA_DIR;
+require( $SA_DIR . 'PHPExcel-1.8/Classes/PHPExcel.php' );
+
 $currentEventID = get_option( 'sa-current-event' , '' );
 $showPage = ( $currentEventID != '' );
 
