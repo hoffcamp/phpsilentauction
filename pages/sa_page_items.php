@@ -15,9 +15,6 @@ $crud-> col( new SA_CRUD_Column( 'title', 'Title' ) )
 	->addClass( 'column-title' )
 	->addClass( 'column-primary' );
 
-$crud-> col( new SA_CRUD_Column( 'description', 'Description' ) )
-	->addClass( 'column-description' );
-
 $crud-> col( new SA_CRUD_FloatColumn( 'value', 'Value', "$%.2f" ) )
 	->addClass( 'column-value' );
 $crud-> col( new SA_CRUD_FloatColumn( 'startBid', 'Starting Bid', "$%.2f" ) )
@@ -70,6 +67,9 @@ class SA_ItemActions extends SA_CRUD_EmptyColumn
 	}
 }
 $crud-> col( new SA_ItemActions( '', 'Actions' ) );
+
+$crud-> col( new SA_CRUD_DescriptionColumn( 'description', 'Description' ) )
+	->addClass( 'column-description' );
 
 function doMainView( $crud ){
 	global $SA_Tables;

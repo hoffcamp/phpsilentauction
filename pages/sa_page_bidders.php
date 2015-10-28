@@ -28,13 +28,13 @@ class SA_BidderActions extends SA_CRUD_EmptyColumn
 	function renderData( $rowID, $d ){
 		?><table><tr><td>
 		
-		<form method="get" action="<?php echo get_admin_url(null, 'admin.php')."?page=sa-bidders" ?>">
-		
-		<input type="submit" class="button" name="action-summary" id="action-summary" value="<?php _e("Summary",'silentauction'); ?>" />
-		
-		<input type="hidden" name="id" value="<?php echo $d[ 'ID' ]; ?>" />
+		<form method="get" action="<?php echo get_admin_url(null, 'admin.php')."?page=sa-bidders" ?>">		
+		<input type="submit" class="button" name="action-summary" id="action-summary" value="<?php _e("Summary",'silentauction'); ?>" />		
+		<input type="hidden" name="id" value="<?php echo $d[ 'bidderNumber' ]; ?>" />
 		<input type="hidden" name="page" value="sa-bidders" />
-		</form></td></tr></table><?php
+		</form>
+		
+		</td></tr></table><?php
 	}
 }
 $crud-> col( new SA_BidderActions( '', 'Actions' ) );

@@ -34,6 +34,32 @@ class SA_CRUD_Column
 	}
 }
 
+class SA_CRUD_DescriptionColumn extends SA_CRUD_Column
+{
+	function __construct( $id = '', $title = '', $maxLen = 150 ){
+		parent::__construct( $id, $title );
+		$this-> maxLen = $maxLen;
+	}
+	
+	function renderData( $rowID, $d ){
+		$str = $d[ $this-> id ];
+		if ( is_string( $str ) ){
+			if ( strlen( $str ) > $this->maxLen - 3 ){
+				echo substr( $str, 0, $this->maxLen ) . '...';
+			} else {
+				echo $str;
+			}
+		}
+	}
+	
+	function renderInput( $rowID, $d ){
+		$value = isset( $d[ $this->id ] ) ? $d[ $this-> id ] : '';
+		$id = 'input-' . $this->id;
+		//rows="10" cols="50" id="moderation_keys" class="large-text code"
+		echo "<textarea class=\"large-text\" rows=\"10\" cols=\"50\" name=\"{$id}\" id=\"{$id}\">{$value}</textarea>";
+	}
+}
+
 class SA_CRUD_BooleanColumn extends SA_CRUD_Column
 {
 	var $trueValue;

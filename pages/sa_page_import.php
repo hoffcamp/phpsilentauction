@@ -40,7 +40,9 @@ function doItemUploadFinal(){
 			$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ], $contactID );
 	}	
 	
+	echo '<div id="message" class="updated">';
 	echo "<p>" . sprintf( __( "Imported %d items", 'silentauction' ), sizeof($uploadData) ) . "</p>";
+	echo '</div>';
 }
 
 function doBidderUploadVerify(){
@@ -70,7 +72,9 @@ function doBidderUploadFinal(){
 		$SA_Tables-> bidders-> add( $currentEventID, $contactID, $entry[ 'bidderNumber' ] );
 	}
 	
+	echo '<div id="message" class="updated">';
 	echo "<p>" . sprintf( __( "Imported %d bidders", 'silentauction' ), sizeof($uploadData) ) . "</p>";
+	echo '</div>';
 }
 
 function doDefault(){

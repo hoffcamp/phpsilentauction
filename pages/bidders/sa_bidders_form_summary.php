@@ -23,12 +23,12 @@ class SA_Form_BidderSummary
 	
 		<tr>
 		<th scope="row"><label for="name">Bidder #</label></th>
-		<td><?php echo htmlspecialchars( $bidderInfo[ 'ID' ] ); ?></td>
+		<td><?php echo htmlspecialchars( $bidderInfo[ 'bidderNumber' ] ); ?></td>
 		</tr>
 	
 		<tr>
 		<th scope="row"><label for="name">Name</label></th>
-		<td><?php echo htmlspecialchars( $bidderInfo[ 'firstName' ] . ' ' . $bidderInfo[ 'lastName' ] ); ?></td>
+		<td><?php echo htmlspecialchars( $bidderInfo[ 'name' ] ); ?></td>
 		</tr>
 	
 		<?php foreach ( $auctionItems as $item ): ?>

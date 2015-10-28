@@ -45,6 +45,7 @@ class SA_Form_ItemsUpload
 			"State" => 'state',
 			"Zip" => 'zip',
 			"Description" => 'title',
+			"Long Description" => 'description',
 			"Value" => 'value',
 			"Email" => 'email'
 		);		
@@ -105,7 +106,7 @@ class SA_Form_ItemsUpload
 					<th><?php _e( "State", 'silentauction' ); ?></th>
 					<th><?php _e( "ZIP", 'silentauction' ); ?></th>
 					<th><?php _e( "Value", 'silentauction' ); ?></th>					
-					<th><?php _e( "Description", 'silentauction' ); ?></th>		
+					<th><?php _e( "Description", 'silentauction' ); ?></th>
 				</tr>
 			</thead>
 			<?php foreach( $data as $d ): ?>
