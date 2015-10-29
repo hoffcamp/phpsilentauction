@@ -13,6 +13,7 @@ require_once 'tables/sa_table_bidders.php';
 require_once 'tables/sa_table_donations.php';
 require_once 'tables/sa_table_items.php';
 require_once 'tables/sa_table_events.php';
+require_once 'tables/sa_table_item_sections.php';
 
 class SA_Tables
 {
@@ -21,6 +22,7 @@ class SA_Tables
 	var $donations;
 	var $items;
 	var $events;
+	var $itemSections;
 	
 	function __construct(){
 		$this-> contacts = new SA_ContactsTable( 'contacts' );
@@ -28,6 +30,7 @@ class SA_Tables
 		$this-> donations = new SA_DonationsTable( 'donations' );
 		$this-> items = new SA_ItemsTable( 'items' );
 		$this-> events = new SA_EventsTable( 'events' );
+		$this-> itemSections = new SA_ItemSectionsTable( 'item_sections' );
 	}
 	
 	function install(){
@@ -36,6 +39,7 @@ class SA_Tables
 		$this-> donations-> install();
 		$this-> items-> install();
 		$this-> events-> install();
+		$this-> itemSections-> install();
 	}
 	
 	function uninstall(){
@@ -44,6 +48,7 @@ class SA_Tables
 		$this-> donations-> uninstall();
 		$this-> items-> uninstall();
 		$this-> events-> uninstall();
+		$this-> itemSections-> uninstall();
 	}
 	
 	//////////////////////////////////////////////////////

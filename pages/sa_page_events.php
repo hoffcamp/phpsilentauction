@@ -31,7 +31,30 @@ $actionsCol = $crud-> col( new SA_EventActions( '', '' ) );
 $actionsCol->addClass( 'column-actions' );
 
 $descriptionCol = $crud-> col( new SA_CRUD_Column( 'description', 'Description' ) );
-$descriptionCol->addClass( 'column-description' );
+$descriptionCol-> addClass( 'column-description' );
+
+class SA_ItemSections extends SA_CRUD_EmptyColumn
+{	
+	/*function hasInput(){ return true; }
+	function renderInput( $rowID, $d ){
+		global $SA_Tables;
+		
+		$sections = $SA_Tables-> itemSections-> getAll( $d[ 'ID' ] );
+		
+		$inputIndex = 0;
+		foreach ( $sections as $s ){
+			$id = 'input-' . $this->id . '-' . $inputIndex;
+			echo "<input type=\"text\" name=\"{$id}\" id=\"{$id}\" value=\"{$s[ 'title' ]}\" class=\"regular-text\"/>";	
+			echo "<input type=\"hidden\" name=\"{$this->id}-id-{$inputIndex}\" value=\"{$s['ID']}\" />";
+			$inputIndex++;
+		}
+		
+		echo "<input type=\"hidden\" name=\"{$this->id}-listcount\" value=\"{$inputIndex}\" />";
+	}*/
+}
+$sectionsCol = $crud-> col( new SA_ItemSections( '', 'Sections' ) )
+	->hideColumn()
+	->addClass( 'column-sections' );
 
 // view functions are responsible for ensuring transaction integrity & security 
 function doMainView( $crud ){
@@ -65,7 +88,9 @@ function processPost( $crud ){
 		$viewMode = $_POST[ 'view-mode' ];
 		if ( $viewMode == 'add' ){
 			$entry = $crud-> processInputFormPost();
-			$SA_Tables-> events-> add( $entry[ 'title' ], $entry[ 'description' ] );		
+			$eventID, $SA_Tables-> events-> add( $entry[ 'title' ], $entry[ 'description' ] );
+			// add a single item section
+			$SA_Tables-> itemSections-> add( $eventID, 'Auction Items' );
 		} elseif ( $viewMode == 'edit' ){
 			$entry = $crud-> processInputFormPost();
 			$SA_Tables-> events-> update( $_POST[ 'edit-id' ], $entry[ 'title' ], $entry[ 'description' ] );

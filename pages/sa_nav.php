@@ -1,12 +1,24 @@
 <?php
 function sa_tab_nav(){
-	$pages = array(
-		'sa-admin-main' => "Home",
-		'sa-items' => "Auction Items",
-		'sa-bidders' => "Bidders",
-		'sa-import' => "Import",
-		'sa-export' => "Export"
-	);
+	global $SA_Tables;
+	$currentEventID = get_option( 'sa-current-event', '' );
+	
+	$pages = array();
+	$pages[ 'sa-admin-main' ] = "Home";	
+	
+	if ( $currentEventID != '' ){
+		$sections = $SA_Tables-> itemSections-> getAll( $currentEventID );
+	} else {
+		$sections = array();
+	}
+	foreach ( $sections as $s ){
+		$pages[ 'sa-items&section=' . $s[ 'ID' ] ] = $s[ 'title' ];
+	}
+	
+	$pages[ 'sa-bidders' ] = "Bidders";
+	$pages[ 'sa-import' ] = "Import";
+	$pages[ 'sa-export' ] = "Export";	
+	
 ?>
 <div id="sa-tabs-wrap">
 	<?php foreach( $pages as $pageKey => $pageTitle ): ?>

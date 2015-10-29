@@ -7,6 +7,7 @@ class SA_ItemsTable extends SA_Table
 			"CREATE TABLE `".$this->name."` ( 
 			`ID` INT(11) NOT NULL AUTO_INCREMENT,
 			`eventID` INT(11) DEFAULT '0' NOT NULL ,
+			`sectionID` INT(11) DEFAULT '0' NOT NULL ,
 			`title` VARCHAR( 255 ) DEFAULT '' NOT NULL ,
 			`description` TEXT DEFAULT '' NOT NULL ,
 			`value` FLOAT DEFAULT '0.0' NOT NULL ,
@@ -21,23 +22,23 @@ class SA_ItemsTable extends SA_Table
 	}
 	
 	// [ ID ]
-	function add( $eventID, $title, $description, $value, $startBid, $minIncrease, $contactID ){
+	function add( $eventID, $sectionID, $title, $description, $value, $startBid, $minIncrease, $contactID ){
 		global $wpdb; 
 		$wpdb-> query(
 		$wpdb-> prepare(
-			"INSERT INTO `{$this->name}` (`eventID`, `title`, `description`, `value`, `startBid`, `minIncrease`, `contactID` ) VALUES ('%d', '%s', '%s', '%f', '%f', '%f', '%d' )",
-			$eventID, $title, $description, $value, $startBid, $minIncrease, $contactID ) );
+			"INSERT INTO `{$this->name}` (`eventID`, `sectionID`, `title`, `description`, `value`, `startBid`, `minIncrease`, `contactID` ) VALUES ('%d', '%d', '%s', '%s', '%f', '%f', '%f', '%d' )",
+			$eventID, $sectionID, $title, $description, $value, $startBid, $minIncrease, $contactID ) );
 		$results = $wpdb->get_row( 'SELECT LAST_INSERT_ID() as `ID`;', ARRAY_A );
 		return $results[ 'ID' ];
 	}
 	
 	// true
-	function update( $ID, $title, $description, $value, $startBid, $minIncrease ){
+	function update( $ID, $sectionID, $title, $description, $value, $startBid, $minIncrease ){
 		global $wpdb;
 		$result = $wpdb-> query(
 		$wpdb-> prepare( 
-			"UPDATE `{$this->name}` SET `title` = '%s', `description` = '%s', `value` = '%f', `startBid` = '%f', `minIncrease` = '%f' WHERE `ID` = %d;",
-			$title, $description, $value, $startBid, $minIncrease, $ID ) );	
+			"UPDATE `{$this->name}` SET `sectionID` = '%d', `title` = '%s', `description` = '%s', `value` = '%f', `startBid` = '%f', `minIncrease` = '%f' WHERE `ID` = %d;",
+			$sectionID, $title, $description, $value, $startBid, $minIncrease, $ID ) );	
 		if ( $result === false ) { return $result; }
 		return true;
 	}
@@ -50,7 +51,7 @@ class SA_ItemsTable extends SA_Table
 	}
 	
 	// [ [*], ... ]
-	function getAll( $eventID, $ascending ){
+	function getAll( $eventID, $sectionID, $ascending ){
 		global $wpdb;
 		if ( $ascending !== true ){
 			$sort = "DESC";
@@ -58,10 +59,10 @@ class SA_ItemsTable extends SA_Table
 			$sort = "";
 		}
 		return $wpdb->get_results(
-				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' ORDER BY `ID` {$sort}", $eventID ), ARRAY_A );
+				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' AND `sectionID` = '%d' ORDER BY `ID` {$sort}", $eventID, $sectionID ), ARRAY_A );
 	}
 	
-	function getCount( $eventID ){
+	function getCount( $eventID, $sectionID ){
 		global $wpdb;
 		$row = $wpdb->get_row(
 				$wpdb->prepare( "SELECT COUNT(*) as `COUNT` FROM `{$this->name}` WHERE `eventID` = '%d'", $eventID ), ARRAY_A );

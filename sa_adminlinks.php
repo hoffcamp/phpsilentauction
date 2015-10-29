@@ -86,7 +86,7 @@ class SA_AdminLinks
 	function page_items(){
 		include 'pages/sa_page_items.php';
 	}
-	
+
 	function page_events(){
 		include 'pages/sa_page_events.php';
 	}

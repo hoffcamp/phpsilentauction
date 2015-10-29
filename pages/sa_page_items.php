@@ -1,7 +1,7 @@
 <?php
 
-// defines the CRUD table for Events
-$crud = new SA_CRUD( 'event-form' );
+// defines the CRUD table for Items
+$crud = new SA_CRUD( 'items-form' );
 
 $crud-> col( new SA_CRUD_ActionsColumn( '', '', array( 'page' => 'sa-items' ) ) )
 	-> add( new SA_CRUD_Action( 'edit', 'Edit', array( 'view' => 'edit' ) ) )
@@ -72,9 +72,11 @@ $crud-> col( new SA_CRUD_DescriptionColumn( 'description', 'Description' ) )
 	->addClass( 'column-description' );
 
 function doMainView( $crud ){
-	global $SA_Tables;
+	global $SA_Tables;	
 	$currentEventID = get_option( 'sa-current-event', '' );
-	$crud-> renderTable( $SA_Tables-> items-> getAll( $currentEventID, true ) );	
+	$currentSectionID = isset( $_GET[ 'section' ] ) ? $_GET[ 'section' ] : 1;
+	
+	$crud-> renderTable( $SA_Tables-> items-> getAll( $currentEventID, $currentSectionID, true ) );	
 }
 
 function doAddView( $crud ){
@@ -122,6 +124,7 @@ function doReopenView( $crud ){
 function processPost( $crud ){
 	global $SA_Tables;
 	$currentEventID = get_option( 'sa-current-event' , '' );
+	$currentSectionID = isset( $_GET[ 'section' ] ) ? $_GET[ 'section' ] : 1;
 	
 	// add & edit
 	if ( isset( $_POST[ 'view-mode' ] ) ){
@@ -130,8 +133,8 @@ function processPost( $crud ){
 			$entry = $crud-> processInputFormPost();
 			// add a contact
 			$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
-			// add an item			
-			$SA_Tables-> items-> add( $currentEventID,
+			// add an item
+			$SA_Tables-> items-> add( $currentEventID, $currentSectionID, 
 				$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ], $contactID );
 		} elseif ( $viewMode == 'edit' ){
 			$entry = $crud-> processInputFormPost();
@@ -140,7 +143,7 @@ function processPost( $crud ){
 			$contactID = $SA_Tables-> items-> getContactID( $editID );
 			$SA_Tables-> contacts-> update( $contactID, $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 			// update item			
-			$SA_Tables-> items-> update( $editID,
+			$SA_Tables-> items-> update( $editID, $currentSectionID,
 				$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ] );
 		}
 	}
