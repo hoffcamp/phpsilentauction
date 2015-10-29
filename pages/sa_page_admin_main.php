@@ -38,7 +38,7 @@ else {
 		echo '<p><h3>' . $eventInfo[ 'title' ] . '</h3></p>';
 		
 		$numBidders = $SA_Tables-> bidders-> getCount( $currentEventID );
-		$numItems = $SA_Tables-> bidders-> getCount( $currentEventID );		
+		$numItems = $SA_Tables-> items-> getCount( $currentEventID, 1 );		
 		
 		?>
 <table class="form-table">
