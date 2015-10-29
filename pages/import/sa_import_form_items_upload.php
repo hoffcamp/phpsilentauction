@@ -45,9 +45,11 @@ class SA_Form_ItemsUpload
 			"State" => 'state',
 			"Zip" => 'zip',
 			"Description" => 'title',
-			"Long Description" => 'description',
+			"Long Description" => 'description',			
+			"Email" => 'email',			
 			"Value" => 'value',
-			"Email" => 'email'
+			"Start Bid" => 'startBid',
+			"Bid Increase" => 'minIncrease'
 		);		
 		
 		$columnIndices = array();

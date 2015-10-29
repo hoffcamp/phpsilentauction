@@ -45,5 +45,12 @@ class SA_BiddersTable extends SA_Table
 				$wpdb->prepare( "SELECT COUNT(*) as `COUNT` FROM `{$this->name}` WHERE `eventID` = '%d'", $eventID ), ARRAY_A );
 		return $row[ 'COUNT' ];
 	}
+	
+	function getByBidderNumber( $bidderNumber ){
+		global $wpdb;
+		return $wpdb->get_row(
+			$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `bidderNumber` = %d;",
+			$bidderNumber ), ARRAY_A );
+	}
 }
 ?>

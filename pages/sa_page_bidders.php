@@ -30,7 +30,8 @@ class SA_BidderActions extends SA_CRUD_EmptyColumn
 		
 		<form method="get" action="<?php echo get_admin_url(null, 'admin.php')."?page=sa-bidders" ?>">		
 		<input type="submit" class="button" name="action-summary" id="action-summary" value="<?php _e("Summary",'silentauction'); ?>" />		
-		<input type="hidden" name="id" value="<?php echo $d[ 'bidderNumber' ]; ?>" />
+		<input type="hidden" name="biddernumber" value="<?php echo $d[ 'bidderNumber' ]; ?>" />
+		<input type="hidden" name="id" value="<?php echo $d[ 'ID' ]; ?>" />
 		<input type="hidden" name="page" value="sa-bidders" />
 		</form>
 		
@@ -65,8 +66,9 @@ function doEditView( $crud ){
 function doSummaryView( $crud ){
 	global $SA_Tables;
 	$bidderID = $_GET[ 'id' ];
+	$bidderNumber = $_GET[ 'biddernumber' ];
 	$action = get_admin_url(null, 'admin.php')."?page=sa-items";
-	$form = new SA_Form_BidderSummary( $bidderID, $action );
+	$form = new SA_Form_BidderSummary( $bidderID, $bidderNumber, $action );
 	$form-> renderForm();
 }
 

@@ -103,7 +103,7 @@ class SA_ItemsTable extends SA_Table
 	}
 	
 	// [ [*], ... ]
-	function getWinningBidsByBidderID( $bidderID ){
+	function getWinningBidsByBidderNumber( $bidderID ){
 		global $wpdb;
 		return $wpdb->get_results(
 			$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `winningBidderID` = '%d'",
