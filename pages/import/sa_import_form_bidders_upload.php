@@ -88,6 +88,15 @@ class SA_Form_BiddersUpload
 
 	function verifyData( $data, $postKey ){
 		?>
+		<div id="message" class="updated">
+		<p>Review the bidders to be imported, then click 'Confirm' to import.</p>
+		</div>
+		<form method="post" enctype="multipart/form-data" action="<?php echo $this-> action; ?>" >			
+			<input type="hidden" name="<?php echo $postKey ?>" value="1" />			
+			<p class="submit">
+				<input type="submit" name="submit" id="submit" class="button button-primary" value="Confirm"  />
+			</p>	
+		</form>	
 		<table>
 			<thead>
 				<tr>
@@ -126,7 +135,7 @@ class SA_Form_BiddersUpload
 		<form method="post" enctype="multipart/form-data" action="<?php echo $this-> action; ?>" >			
 			<input type="hidden" name="<?php echo $postKey ?>" value="1" />			
 			<p class="submit">
-				<input type="submit" name="submit" id="submit" class="button button-primary" value="Import Data"  />
+				<input type="submit" name="submit" id="submit" class="button button-primary" value="Confirm"  />
 			</p>	
 		</form>	
 		<?php		
