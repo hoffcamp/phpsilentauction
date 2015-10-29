@@ -1,7 +1,16 @@
 <?php
 
+class SA_CRUD_ItemRowClasses extends SA_CRUD_RowClasses {
+	function getRowClasses( $rowData ){ 
+		if ( $rowData[ 'winningBidderID' ] == 0 ){
+			return "inactive";
+		}
+		return "inactive closed";
+	}
+}
+
 // defines the CRUD table for Items
-$crud = new SA_CRUD( 'items-form' );
+$crud = new SA_CRUD( 'items-form', new SA_CRUD_ItemRowClasses() );
 
 $crud-> col( new SA_CRUD_ActionsColumn( '', '', array( 'page' => 'sa-items' ) ) )
 	-> add( new SA_CRUD_Action( 'edit', 'Edit', array( 'view' => 'edit' ) ) )
@@ -173,6 +182,9 @@ $showPage = ( $currentEventID != '' );
 <style>
 .column-actions {
 	width: 30px;
+}
+.closed td {
+	background-color: #ccc;
 }
 </style>
 <div class="wrap">

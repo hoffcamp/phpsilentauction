@@ -142,6 +142,11 @@ class SA_CRUD_ActionsColumn extends SA_CRUD_EmptyColumn
 	function add( $a ){ $this-> actions[] = $a; return $this; }
 }
 
+class SA_CRUD_RowClasses
+{
+	function getRowClasses( $rowData ){ return "inactive"; }
+}
+
 class SA_CRUD
 {
 	var $includeCheckboxes; 
@@ -152,7 +157,7 @@ class SA_CRUD
 	var $activeRows;
 	var $submitText;
 	
-	function __construct( $formID = 'crud-form' ){		
+	function __construct( $formID = 'crud-form', $rowClasses = false ){		
 		$this-> formID = $formID;
 		$this-> includeCheckboxes = false;
 		$this-> cols = array();
@@ -160,6 +165,7 @@ class SA_CRUD
 		$this-> rowIDPrefix = $formID . '-';
 		$this-> activeRows = array();
 		$this-> submitText = "Submit";
+		$this-> rowClasses = ( $rowClasses !== false ) ? $rowClasses : new SA_CRUD_RowClasses();		
 	}
 	
 	function col( SA_CRUD_Column $col ){ $this-> cols[] = $col; return $col; }	
@@ -219,7 +225,8 @@ class SA_CRUD
 		<?php foreach ( $data as $d ): ?>
 		<?php $dataID = $d[ $this->rowIDFieldName ]; ?>
 		<?php $rowID = $this->rowIDPrefix . $dataID; ?>
-		<?php $rowClass = isset( $this->activeRows[ $dataID ] ) ? 'active' : 'inactive'; ?>
+		<?php //$rowClass = isset( $this->activeRows[ $dataID ] ) ? 'active' : 'inactive'; ?>
+		<?php $rowClass = $this-> rowClasses-> getRowClasses( $d ); ?>
 		<tr id='<?php echo $rowID; ?>' class='<?php echo $rowClass; ?>'>
 			<th scope='row' class='check-column'>
 				<?php if ( $this-> includeCheckboxes ): ?>
