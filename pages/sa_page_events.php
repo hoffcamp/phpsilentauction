@@ -88,7 +88,7 @@ function processPost( $crud ){
 		$viewMode = $_POST[ 'view-mode' ];
 		if ( $viewMode == 'add' ){
 			$entry = $crud-> processInputFormPost();
-			$SA_Tables-> events-> add( $entry[ 'title' ], $entry[ 'description' ] );
+			$eventID = $SA_Tables-> events-> add( $entry[ 'title' ], $entry[ 'description' ] );
 			// add a single item section
 			$SA_Tables-> itemSections-> add( $eventID, 'Auction Items' );
 		} elseif ( $viewMode == 'edit' ){
