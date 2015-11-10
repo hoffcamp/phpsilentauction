@@ -138,14 +138,20 @@ function doAuctionLog(){
 	$exportData = array();
 	
 	$exportData[] = array(
-		"Item #", "Bidder #", "Winning Bid"
+		"Lot #", "Bidder #", "Winning Bid", "Value", "%Value"
 	);
 	
 	// pretend we did a proper join on bidder, contact ID
 	foreach ( $data as $d ){
 		if ( $d[ 'winningBidderID' ] != 0 ){
+			$value = $d[ 'value' ];
+			$pctValue = $d[ 'winningBid' ] / $value;
+			
 			$exportData[] = array(
-				$d[ 'ID' ], $d[ 'winningBidderID' ], sprintf( "$%.2f", $d[ 'winningBid' ] )
+				$d[ 'lotID' ], $d[ 'winningBidderID' ],
+				sprintf( "$%.2f", $d[ 'winningBid' ] ),
+				sprintf( "$%.2f", $value ),
+				sprintf( "%.2f %%", $pctValue * 100 )
 				);
 		}
 	}

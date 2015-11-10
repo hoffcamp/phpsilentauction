@@ -60,7 +60,7 @@ class SA_ItemsTable extends SA_Table
 			$sort = "";
 		}
 		return $wpdb->get_results(
-				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' AND `sectionID` = '%d' ORDER BY `ID` {$sort}", $eventID, $sectionID ), ARRAY_A );
+				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' AND `sectionID` = '%d' ORDER BY `lotID` {$sort}", $eventID, $sectionID ), ARRAY_A );
 	}
 	
 	function getAllSections( $eventID, $ascending ){
@@ -71,7 +71,7 @@ class SA_ItemsTable extends SA_Table
 			$sort = "";
 		}
 		return $wpdb->get_results(
-				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' ORDER BY `ID` {$sort}", $eventID ), ARRAY_A );
+				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' ORDER BY `lotID` {$sort}", $eventID ), ARRAY_A );
 	}
 	
 	function getCount( $eventID, $sectionID ){
