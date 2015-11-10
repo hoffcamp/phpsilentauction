@@ -48,6 +48,7 @@ require 'pages/includes/sa_page.php';
 require 'pages/bidders/sa_bidders_form_summary.php';
 require 'pages/items/sa_items_form_close.php';
 require 'pages/items/sa_items_form_reopen.php';
+require 'pages/items/sa_items_form_add_and_close.php';
 require 'pages/import/sa_import_form_items_upload.php';
 require 'pages/import/sa_import_form_bidders_upload.php';
 //require 'PHPExcel-1.8/Classes/PHPExcel.php';

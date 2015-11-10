@@ -89,9 +89,21 @@ function doMainView( $crud ){
 }
 
 function doAddView( $crud ){
-	$crud-> renderInputForm( array(),
-		get_admin_url(null, 'admin.php')."?page=sa-items&amp;section=".$_GET[ 'section'],
-		array( 'view-mode' => 'add' ) );
+	global $SA_Tables;
+	$currentEventID = get_option( 'sa-current-event', '' );
+	$currentSectionID = isset( $_GET[ 'section' ] ) ? $_GET[ 'section' ] : 1;
+	$sectionInfo = $SA_Tables-> itemSections-> getByID( $currentSectionID );
+	$actionURL = get_admin_url(null, 'admin.php')."?page=sa-items&section=".$_GET[ 'section'];
+	
+	if ( $sectionInfo[ 'typeID' ] == 0 ){
+		$crud-> renderInputForm( array(),
+			$actionURL,
+			array( 'view-mode' => 'add' ) );
+	} else {
+		$form = new SA_Form_AddAndClose( 
+			$actionURL, $currentEventID, $currentSectionID, $sectionInfo[ 'title' ] );
+		$form->renderForm();
+	}
 }
 
 function doEditView( $crud ){
@@ -134,6 +146,8 @@ function processPost( $crud ){
 	global $SA_Tables;
 	$currentEventID = get_option( 'sa-current-event' , '' );
 	$currentSectionID = isset( $_GET[ 'section' ] ) ? $_GET[ 'section' ] : 1;
+	$actionURL = get_admin_url(null, 'admin.php')."?page=sa-items&section=".$_GET[ 'section'];
+	$sectionInfo = $SA_Tables-> itemSections-> getByID( $currentSectionID );
 	
 	// add & edit
 	if ( isset( $_POST[ 'view-mode' ] ) ){
@@ -173,6 +187,11 @@ function processPost( $crud ){
 		$form = new SA_Form_ReopenItem( $id );
 		$form-> processFormPost();
 	}
+	elseif ( isset( $_POST[ 'action-add-and-close-submit' ] ) ){
+		$form = new SA_Form_AddAndClose( 
+			$actionURL, $currentEventID, $currentSectionID, $sectionInfo[ 'title' ] );
+		$form->processFormPost();
+	}
 }
 
 $currentEventID = get_option( 'sa-current-event' , '' );
@@ -190,8 +209,11 @@ $showPage = ( $currentEventID != '' );
 <div class="wrap">
 <?php
 $subtitle = __( "Items", 'silentauction' );
+$currentPageURL = get_admin_url(null, 'admin.php')."?page=sa-items&amp;section=".$_GET[ 'section' ];
 
-if ( $showPage ){ $subtitle .= ' <a href="' . get_admin_url(null, 'admin.php')."?page=sa-items&amp;section=".$_GET[ 'section' ]."&view=add\" class=\"page-title-action\">" . __("Add Item", 'silentauction') . '</a>'; }
+if ( $showPage ){
+	$subtitle .= ' <a href="' . $currentPageURL."&view=add\" class=\"page-title-action\">" . __("Add Item", 'silentauction') . '</a>';
+	}
 
 sa_heading( $subtitle ); ?>
 

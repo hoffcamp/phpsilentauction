@@ -138,7 +138,7 @@ function doAuctionLog(){
 	$exportData = array();
 	
 	$exportData[] = array(
-		"Lot #", "Bidder #", "Winning Bid", "Value", "%Value"
+		"Lot #", "Bidder #", "Winning Bid", "Value", "%Value", "Description"
 	);
 	
 	// pretend we did a proper join on bidder, contact ID
@@ -151,7 +151,8 @@ function doAuctionLog(){
 				$d[ 'lotID' ], $d[ 'winningBidderID' ],
 				sprintf( "$%.2f", $d[ 'winningBid' ] ),
 				sprintf( "$%.2f", $value ),
-				sprintf( "%.2f %%", $pctValue * 100 )
+				sprintf( "%.2f %%", $pctValue * 100 ),
+				$d[ 'title' ]
 				);
 		}
 	}
