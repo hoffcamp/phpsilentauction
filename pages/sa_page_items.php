@@ -90,7 +90,7 @@ function doMainView( $crud ){
 
 function doAddView( $crud ){
 	$crud-> renderInputForm( array(),
-		get_admin_url(null, 'admin.php')."?page=sa-items",
+		get_admin_url(null, 'admin.php')."?page=sa-items&section=".$_GET[ 'section'],
 		array( 'view-mode' => 'add' ) );
 }
 
@@ -191,7 +191,7 @@ $showPage = ( $currentEventID != '' );
 <?php
 $subtitle = __( "Items", 'silentauction' );
 
-if ( $showPage ){ $subtitle .= ' <a href="' . get_admin_url(null, 'admin.php')."?page=sa-items&view=add\" class=\"page-title-action\">" . __("Add Item", 'silentauction') . '</a>'; }
+if ( $showPage ){ $subtitle .= ' <a href="' . get_admin_url(null, 'admin.php')."?page=sa-items&section=".$_GET[ 'section' ]."&view=add\" class=\"page-title-action\">" . __("Add Item", 'silentauction') . '</a>'; }
 
 sa_heading( $subtitle ); ?>
 
