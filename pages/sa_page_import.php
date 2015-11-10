@@ -36,7 +36,7 @@ function doItemUploadFinal(){
 		// add a contact
 		$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 		// add an item
-		$SA_Tables-> items-> add( $currentEventID, $entry[ 'sectionID' ],
+		$SA_Tables-> items-> add( $currentEventID, $entry[ 'sectionID' ], $entry[ 'lotID' ],
 			$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ], $contactID );
 	}	
 	

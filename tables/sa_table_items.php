@@ -6,6 +6,7 @@ class SA_ItemsTable extends SA_Table
 		$this->_createTable(
 			"CREATE TABLE `".$this->name."` ( 
 			`ID` INT(11) NOT NULL AUTO_INCREMENT,
+			`lotID` INT(11) DEFAULT '0' NOT NULL , 
 			`eventID` INT(11) DEFAULT '0' NOT NULL ,
 			`sectionID` INT(11) DEFAULT '0' NOT NULL ,
 			`title` VARCHAR( 255 ) DEFAULT '' NOT NULL ,
@@ -22,23 +23,23 @@ class SA_ItemsTable extends SA_Table
 	}
 	
 	// [ ID ]
-	function add( $eventID, $sectionID, $title, $description, $value, $startBid, $minIncrease, $contactID ){
+	function add( $eventID, $sectionID, $lotID, $title, $description, $value, $startBid, $minIncrease, $contactID ){
 		global $wpdb; 
 		$wpdb-> query(
 		$wpdb-> prepare(
-			"INSERT INTO `{$this->name}` (`eventID`, `sectionID`, `title`, `description`, `value`, `startBid`, `minIncrease`, `contactID` ) VALUES ('%d', '%d', '%s', '%s', '%f', '%f', '%f', '%d' )",
-			$eventID, $sectionID, $title, $description, $value, $startBid, $minIncrease, $contactID ) );
+			"INSERT INTO `{$this->name}` (`eventID`, `sectionID`, `lotID`, `title`, `description`, `value`, `startBid`, `minIncrease`, `contactID` ) VALUES ('%d', '%d', '%d', '%s', '%s', '%f', '%f', '%f', '%d' )",
+			$eventID, $sectionID, $lotID, $title, $description, $value, $startBid, $minIncrease, $contactID ) );
 		$results = $wpdb->get_row( 'SELECT LAST_INSERT_ID() as `ID`;', ARRAY_A );
 		return $results[ 'ID' ];
 	}
 	
 	// true
-	function update( $ID, $sectionID, $title, $description, $value, $startBid, $minIncrease ){
+	function update( $ID, $sectionID, $lotID, $title, $description, $value, $startBid, $minIncrease ){
 		global $wpdb;
 		$result = $wpdb-> query(
 		$wpdb-> prepare( 
-			"UPDATE `{$this->name}` SET `sectionID` = '%d', `title` = '%s', `description` = '%s', `value` = '%f', `startBid` = '%f', `minIncrease` = '%f' WHERE `ID` = %d;",
-			$sectionID, $title, $description, $value, $startBid, $minIncrease, $ID ) );	
+			"UPDATE `{$this->name}` SET `sectionID` = '%d', `lotID` = '%d', `title` = '%s', `description` = '%s', `value` = '%f', `startBid` = '%f', `minIncrease` = '%f' WHERE `ID` = %d;",
+			$sectionID, $lotID, $title, $description, $value, $startBid, $minIncrease, $ID ) );	
 		if ( $result === false ) { return $result; }
 		return true;
 	}

@@ -12,13 +12,12 @@ class SA_CRUD_ItemRowClasses extends SA_CRUD_RowClasses {
 // defines the CRUD table for Items
 $crud = new SA_CRUD( 'items-form', new SA_CRUD_ItemRowClasses() );
 
-$crud-> col( new SA_CRUD_ActionsColumn( '', '', array( 'page' => 'sa-items' ) ) )
+$crud-> col( new SA_CRUD_ActionsColumn( '', '', array( 'page' => 'sa-items', 'section' => $_GET[ 'section' ] ) ) )
 	-> add( new SA_CRUD_Action( 'edit', 'Edit', array( 'view' => 'edit' ) ) )
 	-> addClass( 'column-actions' );
 
-$crud-> col( new SA_CRUD_Column( 'ID', 'Item #' ) )
-	->addClass( 'column-value' )
-	->disableInput();
+$crud-> col( new SA_CRUD_Column( 'lotID', 'Lot #' ) )
+	->addClass( 'column-value' );	
 	
 $crud-> col( new SA_CRUD_Column( 'title', 'Title' ) )
 	->addClass( 'column-title' )
@@ -144,7 +143,7 @@ function processPost( $crud ){
 			// add a contact
 			$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 			// add an item
-			$SA_Tables-> items-> add( $currentEventID, $currentSectionID, 
+			$SA_Tables-> items-> add( $currentEventID, $currentSectionID, $entry[ 'lotID' ],
 				$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ], $contactID );
 		} elseif ( $viewMode == 'edit' ){
 			$entry = $crud-> processInputFormPost();
@@ -153,7 +152,7 @@ function processPost( $crud ){
 			$contactID = $SA_Tables-> items-> getContactID( $editID );
 			$SA_Tables-> contacts-> update( $contactID, $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 			// update item			
-			$SA_Tables-> items-> update( $editID, $currentSectionID,
+			$SA_Tables-> items-> update( $editID, $currentSectionID, $entry[ 'lotID' ],
 				$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ] );
 		}
 	}

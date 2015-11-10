@@ -66,7 +66,8 @@ class SA_Form_ItemsUpload
 			"Email" => 'email',			
 			"Value" => 'value',
 			"Start Bid" => 'startBid',
-			"Bid Increase" => 'minIncrease'
+			"Bid Increase" => 'minIncrease',
+			"Lot #" => 'lotID'
 		);		
 		
 		$columnIndices = array();
@@ -95,7 +96,8 @@ class SA_Form_ItemsUpload
 				'state' => '',
 				'zip' => '',
 				'email' => '',
-				'sectionID' => $itemSectionID
+				'sectionID' => $itemSectionID,
+				'lotID' => ''
 			);
 			$hasValue = false;
 			for ( $col = 0; $col <= $highestColumnIndex; $col++ ){
@@ -127,6 +129,7 @@ class SA_Form_ItemsUpload
 		<table>
 			<thead>
 				<tr>
+					<th><?php _e( "Lot #", 'silentauction' ); ?></th>
 					<th><?php _e( "Contact Name", 'silentauction' ); ?></th>
 					<th><?php _e( "Email", 'silentauction' ); ?></th>
 					<th><?php _e( "Business", 'silentauction' ); ?></th>
@@ -140,6 +143,7 @@ class SA_Form_ItemsUpload
 			</thead>
 			<?php foreach( $data as $d ): ?>
 				<tr>
+					<td><?php echo $d[ 'lotID' ]; ?></td>
 					<td><?php echo $d[ 'name' ]; ?></td>
 					<td><?php echo $d[ 'email' ]; ?></td>
 					<td><?php echo $d[ 'business' ]; ?></td>
@@ -160,6 +164,7 @@ class SA_Form_ItemsUpload
 			<?php endforeach; ?>
 			<tfoot>
 				<tr>
+					<th><?php _e( "Lot #", 'silentauction' ); ?></th>
 					<th><?php _e( "Contact Name", 'silentauction' ); ?></th>
 					<th><?php _e( "Email", 'silentauction' ); ?></th>
 					<th><?php _e( "Business", 'silentauction' ); ?></th>
