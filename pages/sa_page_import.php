@@ -69,7 +69,7 @@ function doBidderUploadFinal(){
 		// add a contact
 		$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 		// add a bidder
-		$SA_Tables-> bidders-> add( $currentEventID, $contactID, $entry[ 'bidderNumber' ] );
+		$SA_Tables-> bidders-> add( $currentEventID, $contactID, $entry[ 'bidderNumber' ], 0 );
 	}
 	
 	echo '<div id="message" class="updated">';
