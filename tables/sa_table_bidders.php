@@ -8,28 +8,29 @@ class SA_BiddersTable extends SA_Table
 			`eventID` INT DEFAULT '0' NOT NULL ,
 			`contactID` INT DEFAULT '0' NOT NULL ,
 			`bidderNumber` INT DEFAULT '0' NOT NULL ,
+			`expressPay` INT DEFAULT '0' NOT NULL ,
 			PRIMARY KEY ( `ID` )
 			)" );
 	}
 	
 	// [ ID ]
-	function add( $eventID, $contactID, $bidderNumber ){
+	function add( $eventID, $contactID, $bidderNumber, $expressPay ){
 		global $wpdb; 
 		$wpdb-> query(
 		$wpdb-> prepare(
-			"INSERT INTO `{$this->name}` (`eventID`, `contactID`, `bidderNumber`) VALUES ('%d', '%d', '%d')",
-			$eventID, $contactID, $bidderNumber ) );
+			"INSERT INTO `{$this->name}` (`eventID`, `contactID`, `bidderNumber`, `expressPay` ) VALUES ('%d', '%d', '%d', '%d')",
+			$eventID, $contactID, $bidderNumber, $expressPay ) );
 		$results = $wpdb->get_row( 'SELECT LAST_INSERT_ID() as `ID`;', ARRAY_A );
 		return $results[ 'ID' ];
 	}
 	
 	// true on success
-	function update( $ID, $bidderNumber ){
+	function update( $ID, $bidderNumber, $expressPay ){
 		global $wpdb;
 		$result = $wpdb-> query(
 		$wpdb-> prepare( 
-			"UPDATE `{$this->name}` SET `bidderNumber` = '%d' WHERE `ID` = %d;",
-			$bidderNumber, $ID ) );	
+			"UPDATE `{$this->name}` SET `bidderNumber` = '%d', `expressPay` = '%d' WHERE `ID` = %d;",
+			$bidderNumber, $expressPay, $ID ) );	
 		if ( $result === false ) { return $result; }
 		return true;
 	}

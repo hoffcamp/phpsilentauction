@@ -8,6 +8,35 @@ $actionsCol-> addClass( 'column-actions' );
 
 $crud-> col( new SA_CRUD_Column( 'bidderNumber', "Bid No." ) );
 
+class SA_ExpressPaySelect extends SA_CRUD_Column
+{
+	function renderData( $rowID, $d ){
+		if ( $d[ $this->id ] == 0 ){
+			echo "";
+		} else {
+			echo "<strong>Yes</strong>";
+		}
+	}
+	
+	function renderInput( $rowID, $d ){
+		$id = 'input-'.$this->id;
+		$options = array(
+		0 => 'No',
+		1 => 'Yes' 
+		);
+		
+		?>
+		<select name="<?php echo $id; ?>">
+			<?php foreach ( $options as $optI => $opt ): ?>
+				<option value="<?php echo $optI; ?>" <?php if ( $d[ $this->id ] == $optI ){ echo 'selected="selected"'; }; ?> ><?php echo $opt; ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+	}
+}
+
+$crud-> col( new SA_ExpressPaySelect( 'expressPay', "Express Pay" ) );
+
 $nameCol = $crud-> col( new SA_CRUD_Column( 'name', 'Name' ) );
 $nameCol->addClass( 'column-name' );
 
@@ -22,6 +51,7 @@ $crud-> col( new SA_CRUD_Column( 'state', 'State' ) )
 	->hideColumn();
 $crud-> col( new SA_CRUD_Column( 'zip', 'Zip' ) )
 	->hideColumn();	
+
 
 class SA_BidderActions extends SA_CRUD_EmptyColumn
 {
@@ -84,11 +114,11 @@ function processPost( $crud ){
 		if ( $viewMode == 'add' ){
 			$entry = $crud-> processInputFormPost();
 			$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
-			$SA_Tables-> bidders-> add( $currentEventID, $contactID, $entry[ 'bidderNumber' ] );
+			$SA_Tables-> bidders-> add( $currentEventID, $contactID, $entry[ 'bidderNumber' ], $entry[ 'expressPay' ] );
 		} elseif ( $viewMode == 'edit' ){
 			$entry = $crud-> processInputFormPost();
 			$editID = $_POST[ 'edit-id' ]; // bidder ID
-			$SA_Tables-> updateBidderInfo( $currentEventID, $editID, $entry[ 'bidderNumber' ], $entry[ 'name' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );			
+			$SA_Tables-> updateBidderInfo( $currentEventID, $editID, $entry[ 'bidderNumber' ], $entry[ 'expressPay' ], $entry[ 'name' ], '', $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );			
 		}
 	}
 }

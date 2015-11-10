@@ -56,7 +56,7 @@ class SA_Tables
 	function getBidderList( $eventID ){
 		global $wpdb;
 		$result = $wpdb-> get_results(
-			$wpdb->prepare( "SELECT `{$this-> bidders-> name}`.`ID` as `ID`, `{$this-> bidders-> name}`.`bidderNumber`,
+			$wpdb->prepare( "SELECT `{$this-> bidders-> name}`.`ID` as `ID`, `{$this-> bidders-> name}`.`bidderNumber`, `{$this-> bidders-> name}`.`expressPay`, 
 			`{$this-> contacts-> name}`.name, `{$this-> contacts-> name}`.business, `{$this-> contacts-> name}`.email, `{$this-> contacts-> name}`.addr, `{$this-> contacts-> name}`.city, `{$this-> contacts-> name}`.state, `{$this-> contacts-> name}`.zip 
 			FROM `{$this-> bidders-> name}` LEFT OUTER JOIN `{$this-> contacts-> name}` ON `{$this-> bidders-> name}`.`contactID` = `{$this-> contacts-> name}`.`ID`
 			WHERE `{$this-> bidders-> name}`.`eventID` = '%d'; ", $eventID ), ARRAY_A );
@@ -66,7 +66,7 @@ class SA_Tables
 	function getBidderInfo( $eventID, $bidderID ){
 		global $wpdb;
 		$result = $wpdb-> get_row(
-			$wpdb-> prepare( "SELECT `{$this-> bidders-> name}`.`ID` as `ID`, `{$this-> bidders-> name}`.`contactID`, `{$this-> bidders-> name}`.`bidderNumber`,
+			$wpdb-> prepare( "SELECT `{$this-> bidders-> name}`.`ID` as `ID`, `{$this-> bidders-> name}`.`contactID`, `{$this-> bidders-> name}`.`bidderNumber`, `{$this-> bidders-> name}`.`expressPay`, 
 			`{$this-> contacts-> name}`.name, `{$this-> contacts-> name}`.business, `{$this-> contacts-> name}`.email, `{$this-> contacts-> name}`.addr, `{$this-> contacts-> name}`.city, `{$this-> contacts-> name}`.state, `{$this-> contacts-> name}`.zip 
 			FROM `{$this-> bidders-> name}` LEFT OUTER JOIN `{$this-> contacts-> name}` ON `{$this-> bidders-> name}`.`contactID` = `{$this-> contacts-> name}`.`ID`
 			WHERE `{$this-> bidders-> name}`.`eventID` = '%d' AND `{$this-> bidders-> name}`.`ID` = '%d'; ",
@@ -74,10 +74,10 @@ class SA_Tables
 		return $result;
 	}
 	
-	function updateBidderInfo( $eventID, $bidderID, $bidderNumber, $name, $business, $email, $addr, $city, $state, $zip ){
+	function updateBidderInfo( $eventID, $bidderID, $bidderNumber, $expressPay, $name, $business, $email, $addr, $city, $state, $zip ){
 		global $wpdb;
 		$bidderInfo = $this-> getBidderInfo( $eventID, $bidderID );
-		$this-> bidders-> update( $bidderID, $bidderNumber );
+		$this-> bidders-> update( $bidderID, $bidderNumber, $expressPay );
 		$this-> contacts-> update( $bidderInfo[ 'contactID' ], $name, $business, $email, $addr, $city, $state, $zip );
 	}
 }
