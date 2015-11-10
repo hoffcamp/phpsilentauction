@@ -63,7 +63,7 @@ class SA_ItemActions extends SA_CRUD_EmptyColumn
 	function renderData( $rowID, $d ){
 		?><table><tr><td>
 		
-		<form method="get" action="<?php echo get_admin_url(null, 'admin.php')."?page=sa-items" ?>">
+		<form method="get" action="<?php echo get_admin_url(null, 'admin.php')."?page=sa-items&amp;section=".$_GET[ 'section'] ?>">
 		<?php if ( $d[ 'winningBidderID' ] == 0 ): ?>
 		<input type="submit" class="button" name="action-close" id="action-close" value="<?php _e("Close",'silentauction'); ?>" />
 		<?php else: ?>
@@ -72,6 +72,7 @@ class SA_ItemActions extends SA_CRUD_EmptyColumn
 		
 		<input type="hidden" name="id" value="<?php echo $d[ 'ID' ]; ?>" />
 		<input type="hidden" name="page" value="sa-items" />
+		<input type="hidden" name="section" value="<?php echo $_GET[ 'section' ]; ?>" />
 		</form></td></tr></table><?php
 	}
 }
@@ -90,7 +91,7 @@ function doMainView( $crud ){
 
 function doAddView( $crud ){
 	$crud-> renderInputForm( array(),
-		get_admin_url(null, 'admin.php')."?page=sa-items&section=".$_GET[ 'section'],
+		get_admin_url(null, 'admin.php')."?page=sa-items&amp;section=".$_GET[ 'section'],
 		array( 'view-mode' => 'add' ) );
 }
 
@@ -102,7 +103,7 @@ function doEditView( $crud ){
 	$entry = array_merge( $entry, $contactInfo );
 	
 	$crud-> renderInputForm( $entry,
-		get_admin_url(null, 'admin.php')."?page=sa-items",
+		get_admin_url(null, 'admin.php')."?page=sa-items&section=".$_GET[ 'section'],
 		array( 'view-mode' => 'edit', 'edit-id' => $editID ) );
 }
 
@@ -117,7 +118,7 @@ function doPaymentView( $crud ){
 function doCloseView( $crud ){
 	global $SA_Tables;
 	$itemID = $_GET[ 'id' ];
-	$action = get_admin_url(null, 'admin.php')."?page=sa-items";
+	$action = get_admin_url(null, 'admin.php')."?page=sa-items&amp;section=".$_GET[ 'section'];
 	$form = new SA_Form_CloseItem( $itemID, $action );
 	$form-> renderForm();
 }
@@ -125,7 +126,7 @@ function doCloseView( $crud ){
 function doReopenView( $crud ){
 	global $SA_Tables;
 	$itemID = $_GET[ 'id' ];
-	$action = get_admin_url(null, 'admin.php')."?page=sa-items";
+	$action = get_admin_url(null, 'admin.php')."?page=sa-items&section=".$_GET[ 'section' ];
 	$form = new SA_Form_ReopenItem( $itemID, $action );
 	$form-> renderForm();
 }
@@ -191,7 +192,7 @@ $showPage = ( $currentEventID != '' );
 <?php
 $subtitle = __( "Items", 'silentauction' );
 
-if ( $showPage ){ $subtitle .= ' <a href="' . get_admin_url(null, 'admin.php')."?page=sa-items&section=".$_GET[ 'section' ]."&view=add\" class=\"page-title-action\">" . __("Add Item", 'silentauction') . '</a>'; }
+if ( $showPage ){ $subtitle .= ' <a href="' . get_admin_url(null, 'admin.php')."?page=sa-items&amp;section=".$_GET[ 'section' ]."&view=add\" class=\"page-title-action\">" . __("Add Item", 'silentauction') . '</a>'; }
 
 sa_heading( $subtitle ); ?>
 

@@ -62,6 +62,17 @@ class SA_ItemsTable extends SA_Table
 				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' AND `sectionID` = '%d' ORDER BY `ID` {$sort}", $eventID, $sectionID ), ARRAY_A );
 	}
 	
+	function getAllSections( $eventID, $ascending ){
+		global $wpdb;
+		if ( $ascending !== true ){
+			$sort = "DESC";
+		} else {
+			$sort = "";
+		}
+		return $wpdb->get_results(
+				$wpdb->prepare( "SELECT * FROM `{$this->name}` WHERE `eventID` = '%d' ORDER BY `ID` {$sort}", $eventID ), ARRAY_A );
+	}
+	
 	function getCount( $eventID, $sectionID ){
 		global $wpdb;
 		$row = $wpdb->get_row(

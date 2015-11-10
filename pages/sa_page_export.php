@@ -33,6 +33,7 @@ function doExportBidSheets(){
 	
 	$currentEventID = get_option( 'sa-current-event' , '' );
 	$currentSectionID = 1;
+	
 	$maxBidLines = 30;
 	
 	$showPage = ( $currentEventID != '' );

@@ -45,8 +45,7 @@ class SA_Form_ReopenItem
 	</table>
 	
 	<input type="hidden" name="action-reopen-submit" value="1" />
-	<input type="hidden" name="id" value="<?php echo $this->itemID; ?>" />
-	
+	<input type="hidden" name="id" value="<?php echo $this->itemID; ?>" />	
 	<p class="submit">
 		<input type="submit" name="submit" id="submit" class="button button-primary" value="Confirm Reopen Item"  />
 	</p>
