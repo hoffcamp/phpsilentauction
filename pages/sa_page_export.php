@@ -65,20 +65,86 @@ function doExportBidSheets(){
 		$maxBid = $minBid + ( $minIncrease * 20 );
 		
 		ob_start();
+		
 ?>
-		<h2><?php echo $d[ 'title' ]; ?></h2>
+		
+		<table width="100%">
+			<tr>
+				<td width="200px" style="vertical-align:top;">
+					<h3>No. <?php echo $d[ 'lotID' ]; ?></h3>
+				</td>
+				<td align="right" style="vertical-align:top;" >
+					<h3>VALUE <?php echo sprintf( "$%.2f", $d[ 'value' ] ); ?></h3>
+				</td>
+				<tr>				
+				<td>&nbsp;</td>
+			</tr>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td width="400px" style="vertical-align:top;" >
+					<strong><?php echo $d[ 'title' ]; ?></strong>
+				</td>				
+			</tr>
+			<tr>				
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		
 		<div style="width:50%">
 		Donated by
-		<h3><?php echo $contact[ 'business' ]; ?></h3>
+		<strong><?php echo $contact[ 'business' ]; ?></strong>
 		<br />
-		<p><?php echo $d[ 'description' ]; ?></p>
 		<br />
-		<?php 
-		$counter = 0;
-		for ( $bid = $minBid; $bid <= $maxBid && $counter < $maxBidLines; $bid += $minIncrease ): ?>
-		<?php $counter++; ?>
-		<table width="100%"><tr><td width="300px"><hr/></td><td width="100px"><?php echo sprintf( "$%.2f", $bid ); ?></td></tr></table>
-		<?php endfor; ?>
+		
+		<table width="100%">
+			<tr>
+				<td width="300px">
+				<p><?php echo $d[ 'description' ]; ?></p>
+				</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		
+		
+		<br />
+		<table width="100%">
+			<tr>
+				<td width="400px">
+				<strong>
+				MINIMUM BID: <?php echo sprintf( "$%.2f", $d[ 'startBid' ] ); ?>
+				&nbsp; 
+				RAISE: <?php echo sprintf( "$%.2f", $d[ 'minIncrease' ] ); ?>
+				</strong>
+				</td>
+			</tr>
+			
+			<tr>				
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		
+		<table width="100%">
+			<tr>	
+			<tr>
+				<td width="300px"><strong>Bidder #<strong></td>
+				<td width="100px"><strong>Amount ($)</strong></td>
+			</tr>
+			
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			
+			<?php for( $i=1; $i<$maxBidLines; $i++ ): ?>
+				<tr>
+					<td width="300px"><hr/></td>
+					<td width="100px"><hr/></td>
+				</tr>
+			<?php endfor; ?>
+		</table>
+		
 		</div>
 <?php
 		$pieces[ $maxIndex ] = ob_get_clean();
