@@ -32,13 +32,18 @@ function doExportBidSheets(){
 	global $SA_Tables;
 	
 	$currentEventID = get_option( 'sa-current-event' , '' );
-	$currentSectionID = 1;
+	$sectionList = $SA_Tables-> itemSections-> getAll( $currentEventID );
 	
 	$maxBidLines = 30;
 	
 	$showPage = ( $currentEventID != '' );
 
-	$data =  $SA_Tables-> items-> getAll( $currentEventID, $currentSectionID, true );
+	$data = array();
+	foreach ( $sectionList as $sect ){
+		if ( isset( $_POST[ 'section-' . $sect[ 'ID' ] ] ) ){
+			$data = array_merge( $data, $SA_Tables-> items-> getAll( $currentEventID, $sect[ 'ID' ], true ) );
+		}
+	}
 	
 	/////////////////////////////
 	// Etc.
@@ -117,13 +122,20 @@ function doAuctionLog(){
 	global $SA_DIR;
 	
 	$currentEventID = get_option( 'sa-current-event' , '' );
-	$currentSectionID = 1;
+	$sectionList = $SA_Tables-> itemSections-> getAll( $currentEventID );
+	
 	$maxBidLines = 30;
 	
 	$showPage = ( $currentEventID != '' );
 
-	$data =  $SA_Tables-> items-> getAll( $currentEventID, $currentSectionID, true );
-	$exportData = array();	
+	$data = array();
+	
+	foreach ( $sectionList as $sect ){
+		if ( isset( $_POST[ 'section-' . $sect['ID'] ] ) ){
+			$data = array_merge( $data, $SA_Tables-> items-> getAll( $currentEventID, $sect['ID'], true ) );
+		}
+	}	
+	$exportData = array();
 	
 	$exportData[] = array(
 		"Item #", "Bidder #", "Winning Bid"
@@ -148,12 +160,19 @@ function doBidderLog(){
 	global $SA_Tables;
 	
 	$currentEventID = get_option( 'sa-current-event' , '' );
-	$currentSectionID = 1;
+	$sectionList = $SA_Tables-> itemSections-> getAll( $currentEventID );
+	
 	$maxBidLines = 30;
 	
 	$showPage = ( $currentEventID != '' );
 
-	$data = $SA_Tables-> items-> getAll( $currentEventID, $currentSectionID, true );
+	$data = array();
+	foreach ( $sectionList as $sect ){
+		if ( isset( $_POST[ 'section-' . $sect['ID'] ] ) ){
+			$data = array_merge( $data, $SA_Tables-> items-> getAll( $currentEventID, $sect['ID'], true ) );
+		}
+	}
+	
 	$exportData = array();	
 	
 	$exportData[] = array(
@@ -187,12 +206,19 @@ function doDonorLog(){
 	global $SA_Tables;
 	
 	$currentEventID = get_option( 'sa-current-event' , '' );
-	$currentSectionID = 1;
+	$sectionList = $SA_Tables-> itemSections-> getAll( $currentEventID );
+	
 	$maxBidLines = 30;
 	
 	$showPage = ( $currentEventID != '' );
 
-	$data = $SA_Tables-> items-> getAll( $currentEventID, $currentSectionID, true );
+	$data = array();
+	foreach ( $sectionList as $sect ){
+		if ( isset( $_POST[ 'section-' . $sect['ID'] ] ) ){
+			$data = array_merge( $data, $SA_Tables-> items-> getAll( $currentEventID, $sect['ID'], true ) );
+		}
+	}
+	
 	$exportData = array();	
 	
 	$exportData[] = array(
@@ -228,9 +254,46 @@ $showPage = ( $currentEventID != '' );
 $subtitle = __( "Export", 'silentauction' );
 sa_heading( $subtitle );
 
+global $SA_Tables;
+$sectionList = $SA_Tables-> itemSections-> getAll( $currentEventID );
+
 if ( $showPage ){
-	if ( isset( $_GET[ 'item' ] ) ){
-		switch( $_GET[ 'item' ] ){
+	?>
+	<form method="post" action="<?php echo get_admin_url(null, 'admin.php')."?page=sa-export"; ?>" >
+	<p>
+		<?php foreach ( $sectionList as $sect ): ?>
+			<label for="section-<?php echo $sect['ID']; ?>">
+			<?php echo $sect['title']; ?>:&nbsp;
+			<?php $sectionID = 'section-'.$sect['ID']; ?>
+			<input type="checkbox" name="<?php echo $sectionID; ?>"  <?php if ( isset( $_POST[$sectionID] ) ){ echo 'checked'; } ?> />
+			</label>
+		<?php endforeach; ?>
+	</p>
+	
+	<select name="export-type">
+	<?php $types = array( 
+		'bidsheets' => "Bid Sheets",
+		'auctionlog' => "Auction Log",
+		'bidderlog' => "Bidder Log",
+		'donorlog' => "Donor Log" );
+		foreach ( $types as $t => $title ): ?>
+			<option value="<?php echo $t; ?>" <?php 
+				if ( isset( $_POST[ 'export-type' ] ) && $_POST[ 'export-type' ] == $t ){ echo 'selected="selected"'; }
+				?>
+			><?php echo $title; ?></option>			
+	<?php endforeach; ?>
+	</select>
+	
+	<p class="submit">
+		<input type="submit" class="button-primary" name="submit" value="Export" />
+	</p>
+	
+	</form>
+	</hr />
+	<?php
+	
+	if ( isset( $_POST[ 'export-type' ] ) ){
+		switch( $_POST[ 'export-type' ] ){
 		case "bidsheets":
 			doExportBidSheets();
 			break;
@@ -244,21 +307,6 @@ if ( $showPage ){
 			doDonorLog();
 			break;
 		}
-	} else {			
-		?>
-		<p class="submit">
-			<a href="<?php echo get_admin_url(null, 'admin.php')."?page=sa-export&item=bidsheets";?>" class="button button-primary">Bid Sheets</a>
-		</p>
-		<p>
-			<a href="<?php echo get_admin_url(null, 'admin.php')."?page=sa-export&item=auctionlog";?>" class="button button-primary">Auction Log</a>
-		</p>
-		<p>
-			<a href="<?php echo get_admin_url(null, 'admin.php')."?page=sa-export&item=bidderlog";?>" class="button button-primary">Bidder Log</a>
-		</p>
-		<p>
-			<a href="<?php echo get_admin_url(null, 'admin.php')."?page=sa-export&item=donorlog";?>" class="button button-primary">Donor Log</a>
-		</p>
-		<?php
 	}
 }
 ?>
