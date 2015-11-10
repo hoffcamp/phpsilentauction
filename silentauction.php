@@ -114,6 +114,11 @@ function sa_adminMenu() {
 	$SA_AdminLinks = new SA_AdminLinks();
 }
 
+add_action('admin_enqueue_scripts', 'sa_adminEnqueueScripts', 10, 1);
+function sa_adminEnqueueScripts( ) {
+	wp_enqueue_script( 'tablesorter', plugins_url( '/js/jquery.tablesorter.js', __FILE__ ), array( 'jquery' ) );
+}
+
 // sessions
 add_action('wp_logout', 'sa_end_session');
 add_action('wp_login', 'sa_end_session');

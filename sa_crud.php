@@ -203,7 +203,7 @@ class SA_CRUD
 	
 	function renderTable( $data ){
 ?>
-<table class="wp-list-table widefat plugins">
+<table class="wp-list-table widefat plugins" id="crud-table">
 	<thead>
 	<tr>
 		<td  id='cb' class='manage-column column-cb check-column'>

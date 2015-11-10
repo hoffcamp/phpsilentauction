@@ -114,12 +114,7 @@ class SA_AdminLinks
 	}
 	
 	function admin_scripts(){
-		// wp_enqueue_script(
-			 // 'jquery_mobile',
-			 // plugins_url( '/js/jquery.mobile.custom.min.js' , __FILE__ ),
-			 // array('jquery'),
-			// '1.4.5'
-			// );
+		
 	}
 
 	function admin_styles(){

@@ -138,6 +138,12 @@ $showPage = ( $currentEventID != '' );
 	width: 20%;
 }
 </style>
+<script type='text/javascript'>
+jQuery(document).ready(function() {
+	jQuery('#crud-table').tablesorter();
+    //jQuery("table").tablesorter({widthFixed: true, widgets: ['zebra']}).tablesorterPager({container: $("#pager")}); 
+}); 
+</script>
 <div class="wrap">
 
 <?php
