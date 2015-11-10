@@ -37,7 +37,7 @@ class SA_BiddersTable extends SA_Table
 	
 	// [ [*], ... ]
 	function getAll( $ascending = true ){
-		return $this->_getAll( 'contactID', $ascending );
+		return $this->_getAll( 'bidderNumber', $ascending );
 	}
 	
 	function getCount( $eventID ){

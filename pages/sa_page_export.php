@@ -115,6 +115,46 @@ $ob = ob_get_clean();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
+// NameList
+
+function doNameList(){
+	global $SA_Tables;
+	
+	$currentEventID = get_option( 'sa-current-event' , '' );
+	$bidderList = $SA_Tables-> getBidderList( $currentEventID );
+	
+	////////////////////////////
+ob_start();
+?>
+<table style="width:100%">	
+	<tr>
+		<td><strong>Bidder #</strong></td>
+		<td><strong>Name</strong></td>
+	</tr>
+<?php foreach ( $bidderList as $bidder ): ?>
+	<tr>
+		<td><?php echo $bidder[ 'bidderNumber' ]; ?></td>
+		<td><?php echo $bidder[ 'name' ]; ?></td>
+	</tr>
+<?php endforeach; ?>
+</table>
+<?php
+$ob = ob_get_clean();
+/////////////////////////////
+	
+	$pdf = new mPDF();	
+	$pdf->WriteHTML( $ob );
+	$docStr = $pdf->Output( "doc.pdf", "S" );
+
+	?>
+	<div style="width:100%;height:600px;">
+	<embed width=100% height=100%type="application/pdf" src="data:application/pdf;base64,<?php echo base64_encode($docStr); ?>"></embed>
+	</div>
+	<?php
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
 // Auction Log
 
 function doAuctionLog(){
@@ -282,7 +322,8 @@ if ( $showPage ){
 		'bidsheets' => "Bid Sheets",
 		'auctionlog' => "Auction Log",
 		'bidderlog' => "Bidder Log",
-		'donorlog' => "Donor Log" );
+		'donorlog' => "Donor Log",
+		'namelist' => "Name List" );
 		foreach ( $types as $t => $title ): ?>
 			<option value="<?php echo $t; ?>" <?php 
 				if ( isset( $_POST[ 'export-type' ] ) && $_POST[ 'export-type' ] == $t ){ echo 'selected="selected"'; }
@@ -312,6 +353,9 @@ if ( $showPage ){
 			break;
 		case "donorlog":
 			doDonorLog();
+			break;
+		case "namelist":
+			doNameList();
 			break;
 		}
 	}

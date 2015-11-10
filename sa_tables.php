@@ -59,7 +59,7 @@ class SA_Tables
 			$wpdb->prepare( "SELECT `{$this-> bidders-> name}`.`ID` as `ID`, `{$this-> bidders-> name}`.`bidderNumber`, `{$this-> bidders-> name}`.`expressPay`, 
 			`{$this-> contacts-> name}`.name, `{$this-> contacts-> name}`.business, `{$this-> contacts-> name}`.email, `{$this-> contacts-> name}`.addr, `{$this-> contacts-> name}`.city, `{$this-> contacts-> name}`.state, `{$this-> contacts-> name}`.zip 
 			FROM `{$this-> bidders-> name}` LEFT OUTER JOIN `{$this-> contacts-> name}` ON `{$this-> bidders-> name}`.`contactID` = `{$this-> contacts-> name}`.`ID`
-			WHERE `{$this-> bidders-> name}`.`eventID` = '%d'; ", $eventID ), ARRAY_A );
+			WHERE `{$this-> bidders-> name}`.`eventID` = '%d' ORDER BY `{$this-> bidders-> name}`.`bidderNumber`; ", $eventID ), ARRAY_A );
 		return $result;
 	}
 	
