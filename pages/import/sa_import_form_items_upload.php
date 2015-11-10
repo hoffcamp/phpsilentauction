@@ -6,9 +6,24 @@ class SA_Form_ItemsUpload
 	}
 	
 	function renderForm( $postKey ){
+		global $SA_Tables;
+		$currentEventID = get_option( 'sa-current-event', '' );
+		$sections = $SA_Tables-> itemSections-> getAll( $currentEventID );
+		
 		?>
 <form method="post" enctype="multipart/form-data" action="<?php echo $this-> action; ?>" >
 	<table class="form-table">
+		<tr>
+		<th scope="row"><label for="file-upload">Item Section</label></th>
+		<td>
+			<select name="item-section">
+			<?php foreach ( $sections as $s ): ?>
+				<option value=<?php echo $s['ID']; ?>"><?php echo $s['title']; ?></option>
+			<?php endforeach; ?>
+			</select>
+		</td>
+		</tr>
+		
 		<tr>
 		<th scope="row"><label for="file-upload">Import Items</label></th>
 		<td><input type="file" name="file-upload" id="file-upload"></td>
@@ -26,6 +41,8 @@ class SA_Form_ItemsUpload
 	// return the data scraped from the document
 	function processPost(){
 		$filename = $_FILES[ 'file-upload' ][ "tmp_name" ];
+		
+		$itemSectionID = $_POST[ 'item-section' ];
 		
 		$objPHPExcel = PHPExcel_IOFactory::load($filename);
 		
@@ -78,6 +95,7 @@ class SA_Form_ItemsUpload
 				'state' => '',
 				'zip' => '',
 				'email' => '',
+				'sectionID' => $itemSectionID
 			);
 			$hasValue = false;
 			for ( $col = 0; $col <= $highestColumnIndex; $col++ ){

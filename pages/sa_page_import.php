@@ -27,8 +27,7 @@ function doItemUploadVerify(){
 
 function doItemUploadFinal(){
 	global $SA_Tables;
-	$currentEventID = get_option( 'sa-current-event' , '' );	
-	$currentSectionID = 1;
+	$currentEventID = get_option( 'sa-current-event' , '' );		
 	
 	$uploadData = $_SESSION[ 'sa-import-data' ];
 	unset( $_SESSION[ 'sa-import-data' ] );
@@ -37,7 +36,7 @@ function doItemUploadFinal(){
 		// add a contact
 		$contactID = $SA_Tables-> contacts-> add( $entry[ 'name' ], $entry[ 'business' ], $entry[ 'email' ], $entry[ 'addr' ], $entry[ 'city' ], $entry[ 'state' ], $entry[ 'zip' ] );
 		// add an item
-		$SA_Tables-> items-> add( $currentEventID, $currentSectionID,
+		$SA_Tables-> items-> add( $currentEventID, $entry[ 'sectionID' ],
 			$entry[ 'title' ], $entry[ 'description' ], $entry[ 'value' ], $entry[ 'startBid' ], $entry[ 'minIncrease' ], $contactID );
 	}	
 	

@@ -65,6 +65,16 @@ class SA_AdminLinks
 			'sa-events',
 			array($this,'page_events')
 			);
+			
+		// Event detail
+		$this-> pages[] = add_submenu_page(
+			'sa-admin-main',
+			__("Event Detail", 'silentauction'), 
+			__("Event Detail", 'silentauction'),
+			'silent_auction_superadmin',
+			'sa-event-detail',
+			array($this,'page_event_detail')
+			);
 		
 		foreach ( $this-> pages as $page ){
 			 add_action( 'admin_print_scripts-' . $page, array( $this, 'admin_scripts' ) );
@@ -89,6 +99,10 @@ class SA_AdminLinks
 
 	function page_events(){
 		include 'pages/sa_page_events.php';
+	}
+	
+	function page_event_detail(){
+		include 'pages/sa_page_event_detail.php';
 	}
 	
 	function page_import(){

@@ -90,7 +90,7 @@ function processPost( $crud ){
 			$entry = $crud-> processInputFormPost();
 			$eventID = $SA_Tables-> events-> add( $entry[ 'title' ], $entry[ 'description' ] );
 			// add a single item section
-			$SA_Tables-> itemSections-> add( $eventID, 'Auction Items' );
+			$SA_Tables-> itemSections-> add( $eventID, 'Auction Items', 0 );
 		} elseif ( $viewMode == 'edit' ){
 			$entry = $crud-> processInputFormPost();
 			$SA_Tables-> events-> update( $_POST[ 'edit-id' ], $entry[ 'title' ], $entry[ 'description' ] );
