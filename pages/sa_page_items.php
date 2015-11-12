@@ -205,11 +205,15 @@ $showPage = ( $currentEventID != '' );
 .closed td {
 	background-color: #ccc;
 }
+#crud-table th : hover { 
+  font-weight: bold;
+}
+
 </style>
 <script type='text/javascript'>
 jQuery(document).ready(function() {
 	jQuery('#crud-table').tablesorter();
-    //jQuery("table").tablesorter({widthFixed: true, widgets: ['zebra']}).tablesorterPager({container: $("#pager")}); 
+	//jQuery('#crud-table').tablesorter({widthFixed: true, widgets: ['zebra']});//.tablesorterPager({container: $("#pager")}); 
 }); 
 </script>
 <div class="wrap">

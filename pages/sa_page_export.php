@@ -34,7 +34,8 @@ function doExportBidSheets(){
 	$currentEventID = get_option( 'sa-current-event' , '' );
 	$sectionList = $SA_Tables-> itemSections-> getAll( $currentEventID );
 	
-	$maxBidLines = 30;
+	$maxBidLines = 32;
+	$maxBidLines2 = 42;
 	
 	$showPage = ( $currentEventID != '' );
 
@@ -47,6 +48,29 @@ function doExportBidSheets(){
 	
 	/////////////////////////////
 	// Etc.
+		
+		ob_start();		
+		?>
+		<table width="100%">
+			<tr>	
+			<tr>
+				<td width="300px"><strong>Bidder #<strong></td>
+				<td width="100px"><strong>Amount ($)</strong></td>
+			</tr>
+		
+			
+			<?php for( $i=1; $i<$maxBidLines2; $i++ ): ?>
+				<tr>
+					<td width="300px"><hr/></td>
+					<td width="100px"><hr/></td>
+				</tr>
+			<?php endfor; ?>
+		</table>		
+		</div>
+<?php		
+	$pieceExtra = ob_get_clean();
+		
+	////////////////////////////
 		
 	$pieces = array();
 	$maxIndex = 0;
@@ -158,8 +182,8 @@ ob_start();
 <table style="width:100%">	
 	<tr>
 		<td style="width:50%;padding:15px;vertical-align:top;"><?php echo $pieces[$i]; ?></td>	
-		<?php $i++; if ( $i == $maxIndex ){ $i--; } ?>	
-		<td style="width:50%;padding:15px;vertical-align:top;"><?php echo $pieces[$i]; ?></td>	
+		<?php /* $i++; if ( $i == $maxIndex ){ $i--; } ?>	*/ ?>
+		<td style="width:50%;padding:15px;vertical-align:top;"><?php echo $pieceExtra; ?></td>
 	</tr>
 </table>
 <pagebreak />
@@ -371,14 +395,28 @@ global $SA_Tables;
 $sectionList = $SA_Tables-> itemSections-> getAll( $currentEventID );
 
 if ( $showPage ){
+	$sectionChecked = array();
+	$isPost = isset( $_POST[ 'sa-export-form' ] );	
+	
+	foreach ( $sectionList as $sect ){
+		$sectionChecked[ $sect['ID'] ] =
+		( $isPost == false )
+			|| ( isset( $_POST[ 'section-'.$sect['ID'] ] ) );
+	}
+	
 	?>
 	<form method="post" action="<?php echo get_admin_url(null, 'admin.php')."?page=sa-export"; ?>" >
+	
+	<input type="hidden" name="sa-export-form" value="1" />
+	
+	<?php $usePost = isset( $_POST[ 'sa-export-form' ] ); ?>
+	
 	<p>
 		<?php foreach ( $sectionList as $sect ): ?>
 			<label for="section-<?php echo $sect['ID']; ?>">
 			<?php echo $sect['title']; ?>:&nbsp;
 			<?php $sectionID = 'section-'.$sect['ID']; ?>
-			<input type="checkbox" name="<?php echo $sectionID; ?>"  <?php if ( isset( $_POST[$sectionID] ) ){ echo 'checked'; } ?> />
+			<input type="checkbox" name="<?php echo $sectionID; ?>"  <?php if ( $sectionChecked[ $sect['ID'] ] ){ echo 'checked'; } ?> />
 			</label>
 		<?php endforeach; ?>
 	</p>
