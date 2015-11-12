@@ -28,7 +28,7 @@ class SA_ExpressPaySelect extends SA_CRUD_Column
 		?>
 		<select name="<?php echo $id; ?>">
 			<?php foreach ( $options as $optI => $opt ): ?>
-				<option value="<?php echo $optI; ?>" <?php if ( $d[ $this->id ] == $optI ){ echo 'selected="selected"'; }; ?> ><?php echo $opt; ?></option>
+				<option value="<?php echo $optI; ?>" <?php if ( isset( $d[ $this->id ] ) && $d[ $this->id ] == $optI ){ echo 'selected="selected"'; }; ?> ><?php echo $opt; ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php
