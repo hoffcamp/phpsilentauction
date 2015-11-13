@@ -51,60 +51,10 @@ class SA_Form_BidderSummary
 		$bidderInfo = $SA_Tables-> getBidderInfo( $currentEventID, $this-> bidderID );
 		$auctionItems = $SA_Tables-> items-> getWinningBidsByBidderNumber( $this-> bidderNumber );
 		
-		$auctionSections = $this-> splitItemsIntoSections( $auctionItems );
-		
-		$bidderTotal = 0;
-		
-	ob_start(); ?>
-		<h1><?php echo $currentEventInfo[ 'title' ]; ?></h1>
-		<h3>Bidder Summary</h3>
-		<table class="form-table" width="100%">	
-
-		<tr>
-		<td scope="row"><label for="name"><strong>Bidder #</strong></label></td>
-		<td><?php echo htmlspecialchars( $bidderInfo[ 'bidderNumber' ] ); ?></td>
-		</tr>
-
-		<tr>
-		<td scope="row"><label for="name"><strong>Name</strong></label></td>
-		<td><?php echo htmlspecialchars( $bidderInfo[ 'name' ] ); ?></td>
-		</tr>
-		
-		<tr>
-		<td scope="row" colspan="2"><hr /></td>
-		</tr>
-
-		<?php foreach ( $auctionSections as $sect ): ?>
-			<tr>
-			<td scope="row" colspan="2"><?php echo $sect[ 'title' ]; ?></td>
-			</tr>
-			<?php foreach ( $sect[ 'items' ] as $item ): ?>
-				<?php $bidderTotal += $item[ 'winningBid' ]; ?>
-				<tr>
-				<td scope="row"><label for="name"><i><?php echo $item[ 'title' ]; ?></i></label></td>
-				<td>
-					<p><?php echo sprintf( "$%.2f", $item[ 'winningBid' ] ); ?></p>
-				</td>
-				</tr>
-			<?php endforeach; ?>
-			
-			<tr>
-			<td scope="row" colspan="2">&nbsp;</td>
-			</tr>
-			
-		<?php endforeach; ?>
-		<tr>
-		<td scope="row" colspan="2">&nbsp;</td>
-		</tr>
-		
-		<tr>
-		<td scope="row"><label for="total"><strong>Total</strong></label></td>
-		<td><?php echo sprintf( "$%.2f", $bidderTotal ); ?></td>
-		</tr>
-
-		</table>
-<?php 
-	$ob = ob_get_clean();		
+		$auctionSections = $this-> splitItemsIntoSections( $auctionItems );		
+	
+		$tableNumber = floor( $bidderInfo[ 'bidderNumber' ] / 10.0 );
+		$ob = sa_template_Summary( $currentEventInfo, $bidderInfo, $tableNumber, $auctionSections );		
 		
 		$pdf = new mPDF();	
 		$pdf->WriteHTML( $ob );

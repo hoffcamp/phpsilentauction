@@ -51,6 +51,10 @@ require 'pages/items/sa_items_form_reopen.php';
 require 'pages/items/sa_items_form_add_and_close.php';
 require 'pages/import/sa_import_form_items_upload.php';
 require 'pages/import/sa_import_form_bidders_upload.php';
+
+require 'templates/sa_template_bidsheet.php';
+require 'templates/sa_template_summary.php';
+
 //require 'PHPExcel-1.8/Classes/PHPExcel.php';
 //require 'fpdf/fpdf.php';
 
