@@ -20,6 +20,7 @@ function doItemUploadVerify(){
 	$form = new SA_Form_ItemsUpload( $action );
 	$uploadData = $form->processPost();
 	
+	unset( $_SESSION[ 'sa-import-data' ] );
 	$_SESSION[ 'sa-import-data' ] = $uploadData;
 	
 	$form->verifyData( $uploadData, 'action-item-verify' );		
