@@ -49,6 +49,10 @@ function sa_template_BidSheet( $data ){
 		
 		$maxBid = $minBid + ( $minIncrease * 20 );
 		
+		$valueStr =( $d['value'] == 0 )?
+					'priceless'
+					: sprintf( "$%.2f", $d[ 'value' ] );
+		
 		ob_start();
 		
 ?>
@@ -59,7 +63,7 @@ function sa_template_BidSheet( $data ){
 					<h3>No. <?php echo $d[ 'lotID' ]; ?></h3>
 				</td>
 				<td align="right" style="vertical-align:top;" >
-					<h3>VALUE <?php echo sprintf( "$%.2f", $d[ 'value' ] ); ?></h3>
+					<h3>VALUE <?php echo $valueStr; ?></h3>
 				</td>
 				<tr>				
 				<td>&nbsp;</td>
@@ -79,7 +83,7 @@ function sa_template_BidSheet( $data ){
 		
 		<div style="width:50%">
 		Donated by
-		<strong><?php echo $contact[ 'business' ]; ?></strong>
+		<strong><?php echo $contact[ 'name' ]; ?></strong>
 		<br />
 		<br />
 		

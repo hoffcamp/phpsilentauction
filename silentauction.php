@@ -36,7 +36,9 @@ load_plugin_textdomain(
 	);
 	
 error_reporting( E_ALL );
-	
+
+ini_set('max_execution_time', 300);
+
 require 'sa_capabilities.php';
 require 'sa_adminlinks.php';
 require 'sa_tables.php';
