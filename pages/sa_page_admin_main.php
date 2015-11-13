@@ -53,16 +53,6 @@ else {
 	<td><?php echo $numItems; ?></td>
 	</tr>
 	
-	<tr>
-	<th scope="row"><label for="testData">Test Data</label></th>
-	<td><?php
-	
-	echo '<p><a href="' . plugins_url( 'silentauction' ) . '/GalaItems.xlsx" >GalaItems.xlsx</a>';
-	echo '<br />';
-	echo '<a href="' . plugins_url( 'silentauction' ) . '/GalaBidders.xlsx" >GalaBidders.xlsx</a></p>';
-	
-	?></td>
-	</tr>
 	
 </table>
 		<?php
