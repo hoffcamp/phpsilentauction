@@ -218,7 +218,12 @@ jQuery(document).ready(function() {
 </script>
 <div class="wrap">
 <?php
-$subtitle = __( "Items", 'silentauction' );
+global $SA_Tables;
+
+$sectionInfo = $SA_Tables-> itemSections-> getByID( $_GET[ 'section'] );
+
+
+$subtitle = $sectionInfo[ 'title' ];//__( "", 'silentauction' );
 $currentPageURL = get_admin_url(null, 'admin.php')."?page=sa-items&amp;section=".$_GET[ 'section' ];
 
 if ( $showPage ){
