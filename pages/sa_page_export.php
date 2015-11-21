@@ -131,7 +131,8 @@ function doAuctionLog(){
 	foreach ( $data as $d ){
 		if ( $d[ 'winningBidderID' ] != 0 ){
 			$value = $d[ 'value' ];
-			$pctValue = $d[ 'winningBid' ] / $value;
+			
+			$pctValue = ( $value == 0.0 ) ? 0.0 : ( $d[ 'winningBid' ] / $value );
 			
 			$exportData[] = array(
 				$d[ 'lotID' ], $d[ 'winningBidderID' ],
